@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElderCare Compassionate Care for Your Loved Ones</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== HERO ===== */
+        
+        .hero {
+            min-height: calc(100vh - 72px);
+            background: linear-gradient(160deg, #f0f5f1 0%, var(--cream) 60%);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 4rem;
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero-content {
+            animation: fadeInUp 0.8s ease both;
+        }
+        
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(122, 158, 126, 0.12);
+            border: 1px solid rgba(122, 158, 126, 0.25);
+            color: var(--sage-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 5vw, 4.2rem);
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--charcoal);
+            margin-bottom: 1.25rem;
+        }
+        
+        .hero h1 em {
+            font-style: italic;
+            color: var(--sage-dark);
+            position: relative;
+        }
+        
+        .hero h1 em::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+            opacity: 0.6;
+        }
+        
+        .hero-desc {
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .stat-item {}
+        
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        /* Hero Visual */
+        
+        .hero-visual {
+            position: relative;
+            animation: fadeInRight 0.9s ease 0.2s both;
+        }
+        
+        .hero-card-main {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-hover);
+            position: relative;
+        }
+        
+        .hero-card-main .card-img {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(135deg, #c8deca 0%, #a8c5b0 50%, #7a9e80 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+        }
+        
+        .hero-card-info {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-card-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+        
+        .hero-card-info p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        
+        .availability-dot {
+            width: 10px;
+            height: 10px;
+            background: #4caf72;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        
+        .floating-badge {
+            position: absolute;
+            background: white;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .fb-1 {
+            top: -16px;
+            right: -16px;
+        }
+        
+        .fb-2 {
+            bottom: 60px;
+            left: -20px;
+        }
+        
+        .fb-icon {
+            font-size: 1.4rem;
+        }
+        /* Trust Bar */
+        
+        .trust-bar {
+            background: white;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+        }
+        
+        .trust-bar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+        
+        .trust-item .icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(122, 158, 126, 0.12);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        /* Services Preview */
+        
+        .services-section {
+            background: var(--cream);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--sage);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(122, 158, 126, 0.15), rgba(122, 158, 126, 0.05));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .service-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+        
+        .service-card p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+        
+        .service-tag {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            background: rgba(122, 158, 126, 0.1);
+            color: var(--sage-dark);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        /* How it works */
+        
+        .hiw-section {
+            background: linear-gradient(160deg, var(--charcoal) 0%, #1e3028 100%);
+            color: white;
+        }
+        
+        .hiw-section .section-title {
+            color: white;
+        }
+        
+        .steps-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+        
+        .steps-row::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: calc(12.5% + 28px);
+            right: calc(12.5% + 28px);
+            height: 2px;
+            background: rgba(122, 158, 126, 0.3);
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-num {
+            width: 56px;
+            height: 56px;
+            background: rgba(122, 158, 126, 0.2);
+            border: 2px solid rgba(122, 158, 126, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--sage-light);
+            position: relative;
+            z-index: 1;
+            background: var(--charcoal);
+        }
+        
+        .step h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .step p {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.6;
+        }
+        /* Testimonials */
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.3s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stars {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        
+        .testimonial-card p {
+            font-size: 0.92rem;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .reviewer-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sage), var(--blush));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .reviewer-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+        
+        .reviewer-role {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+        /* CTA section */
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--sage-dark) 0%, var(--charcoal) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-section .section-title {
+            color: white;
+        }
+        
+        .cta-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 auto 2.5rem;
+        }
+        
+        .cta-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-white {
+            background: white;
+            color: var(--sage-dark);
+        }
+        
+        .btn-white:hover {
+            background: var(--cream);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        /* Animations */
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.85);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .steps-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .steps-row::before {
+                display: none;
+            }
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.25rem;
+                gap: 2.5rem;
+                min-height: auto;
+            }
+            .hero-visual {
+                display: none;
+            }
+            .hero-stats {
+                gap: 1.5rem;
+            }
+            .services-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .trust-bar-inner {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .steps-row {
+                grid-template-columns: 1fr;
+            }
+            .hero-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="nav-placeholder"></div>
+
+    <!-- HERO -->
+    <section style="padding:0; background: linear-gradient(160deg,#f0f5f1 0%,var(--cream) 60%);">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-eyebrow">🌿 Trusted by 2,000+ Families</div>
+                <h1>
+                    Care That Feels Like<br>
+                    <em>Family</em>
+                </h1>
+                <p class="hero-desc">
+                    Connect with professionally trained, background-checked caregivers who bring compassion, expertise, and dignity to your loved one's daily life.
+                </p>
+                <div class="hero-actions">
+                    <a href="booking.html" class="btn btn-primary">Book a Caregiver →</a>
+                    <a href="caregivers.html" class="btn btn-outline">Meet Our Team</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-num">500+</div>
+                        <div class="stat-label">Certified Caregivers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">24/7</div>
+                        <div class="stat-label">Available Support</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card-main">
+                    <div class="card-img">👴🏽</div>
+                    <div class="hero-card-info">
+                        <div>
+                            <h3>Margaret & Sarah</h3>
+                            <p><span class="availability-dot"></span>Active Care Session</p>
+                        </div>
+                        <div class="badge badge-verified">✓ Verified</div>
+                    </div>
+                </div>
+                <div class="floating-badge fb-1">
+                    <span class="fb-icon">🛡️</span>
+                    <div>
+                        <div style="color:var(--charcoal);font-size:0.82rem;">Background Checked</div>
+                        <div style="color:var(--muted);font-size:0.75rem;font-weight:400;">All caregivers verified</div>
+                    </div>
+                </div>
+                <div class="floating-badge fb-2">
+                    <span class="fb-icon">⭐</span>
+                    <div>
+                        <div style="color:var(--charcoal);font-size:0.82rem;">4.9/5 Rating</div>
+                        <div style="color:var(--muted);font-size:0.75rem;font-weight:400;">From 1,800+ reviews</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <div class="trust-bar">
+        <div class="trust-bar-inner">
+            <div class="trust-item">
+                <div class="icon">🔒</div>
+                <div>Background-Checked Caregivers</div>
+            </div>
+            <div class="trust-item">
+                <div class="icon">🏥</div>
+                <div>Medically Trained Staff</div>
+            </div>
+            <div class="trust-item">
+                <div class="icon">📋</div>
+                <div>Licensed & Insured Agency</div>
+            </div>
+            <div class="trust-item">
+                <div class="icon">⏰</div>
+                <div>Same-Day Bookings Available</div>
+            </div>
+            <div class="trust-item">
+                <div class="icon">💬</div>
+                <div>24/7 Family Support Line</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICES OVERVIEW -->
+    <section class="services-section">
+        <div class="container">
+            <div class="section-label">Our Services</div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1.5rem;">
+                <div>
+                    <h2 class="section-title">Care Tailored to<br>Every Need</h2>
+                    <p class="section-subtitle">From daily companionship to complex medical support — we match you with the right caregiver.</p>
+                </div>
+                <a href="services.html" class="btn btn-outline">View All Services</a>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">💊</div>
+                    <h3>Medical Care</h3>
+                    <p>Medication management, vital monitoring, wound care, and coordination with healthcare providers for comprehensive in-home medical support.</p>
+                    <span class="service-tag">From $28/hr</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🤝</div>
+                    <h3>Companion Care</h3>
+                    <p>Meaningful companionship, social engagement, light housekeeping, meal preparation, and transportation to appointments and activities.</p>
+                    <span class="service-tag">From $18/hr</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏥</div>
+                    <h3>Post-Surgery Recovery</h3>
+                    <p>Specialized support after surgery including wound care, mobility assistance, physical therapy exercises, and post-op monitoring.</p>
+                    <span class="service-tag">From $32/hr</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🌙</div>
+                    <h3>Overnight Care</h3>
+                    <p>Dedicated overnight supervision for safety and peace of mind. Our caregivers stay awake and alert through the night.</p>
+                    <span class="service-tag">+$120 premium</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧠</div>
+                    <h3>Dementia Support</h3>
+                    <p>Specialized memory care from certified caregivers trained in dementia management techniques and behavioral approaches.</p>
+                    <span class="service-tag">Specialized</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏃</div>
+                    <h3>Rehabilitation Support</h3>
+                    <p>Assist with prescribed home exercises, fall prevention, mobility training, and coordination with physical therapists.</p>
+                    <span class="service-tag">From $25/hr</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="hiw-section">
+        <div class="container">
+            <div class="section-label" style="color:var(--sage-light)">Simple Process</div>
+            <h2 class="section-title">Getting Started is Easy</h2>
+            <div class="steps-row">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h4>Choose Care Type</h4>
+                    <p>Tell us what kind of support your loved one needs from our range of services</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h4>Browse Caregivers</h4>
+                    <p>Review profiles, credentials, reviews, and select the right caregiver</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h4>Book & Schedule</h4>
+                    <p>Pick your dates, duration and confirm with our easy booking form</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <h4>Care Begins</h4>
+                    <p>Your caregiver arrives on time and we follow up to ensure satisfaction</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+        <div class="container">
+            <div class="section-label">Family Stories</div>
+            <h2 class="section-title">What Families Are Saying</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Sarah has been caring for my mother for 6 months. Her patience, warmth, and medical knowledge have been a genuine blessing for our entire family."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">R</div>
+                        <div>
+                            <div class="reviewer-name">Rajesh M.</div>
+                            <div class="reviewer-role">Son, Companion Care Client</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"After my father's hip surgery, the post-surgery care team was incredible. They managed everything from wound care to physical therapy exercises perfectly."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">P</div>
+                        <div>
+                            <div class="reviewer-name">Priya K.</div>
+                            <div class="reviewer-role">Daughter, Post-Surgery Client</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"The overnight care service gave me actual peace of mind for the first time in years. Our caregiver is reliable, attentive, and truly kind-hearted."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">A</div>
+                        <div>
+                            <div class="reviewer-name">Amir S.</div>
+                            <div class="reviewer-role">Spouse, Overnight Care Client</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="section-label" style="color:var(--sage-light)">Start Today</div>
+            <h2 class="section-title">Ready to Give Your Loved One the Best Care?</h2>
+            <p class="section-subtitle">Book a qualified caregiver in minutes. Same-day availability in most areas.</p>
+            <div class="cta-actions">
+                <a href="booking.html" class="btn btn-white">Book a Caregiver →</a>
+                <a href="pricing.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.4);color:white;">View Pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    <script src="shared.js"></script>
+</body>
+
+</html>

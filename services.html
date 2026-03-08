@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services – ElderCare</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .services-main {
+            padding: 5rem 0;
+        }
+        /* Care type checklist */
+        
+        .checklist-intro {
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+        
+        .care-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .care-option {
+            position: relative;
+        }
+        
+        .care-option input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .care-label {
+            display: block;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            height: 100%;
+        }
+        
+        .care-label:hover {
+            border-color: var(--sage-light);
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+        
+        .care-option input:checked+.care-label {
+            border-color: var(--sage-dark);
+            background: linear-gradient(145deg, rgba(122, 158, 126, 0.06), white);
+            box-shadow: 0 0 0 3px rgba(78, 114, 84, 0.12);
+        }
+        
+        .care-label-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .care-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(122, 158, 126, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: background 0.25s;
+        }
+        
+        .care-option input:checked+.care-label .care-icon-wrap {
+            background: var(--sage-dark);
+        }
+        
+        .check-indicator {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .care-option input:checked+.care-label .check-indicator {
+            background: var(--sage-dark);
+            border-color: var(--sage-dark);
+        }
+        
+        .check-indicator::after {
+            content: '✓';
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .care-option input:checked+.care-label .check-indicator::after {
+            opacity: 1;
+        }
+        
+        .care-label h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.4rem;
+        }
+        
+        .care-label p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-bottom: 1rem;
+        }
+        
+        .care-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .care-price {
+            font-weight: 700;
+            color: var(--sage-dark);
+            font-size: 0.95rem;
+        }
+        
+        .care-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--muted);
+            background: rgba(44, 62, 53, 0.06);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 0.75rem;
+        }
+        
+        .features-list li {
+            font-size: 0.82rem;
+            color: var(--muted);
+            padding: 0.2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .features-list li::before {
+            content: '•';
+            color: var(--sage);
+            font-size: 1rem;
+        }
+        /* Selected summary */
+        
+        .selection-summary {
+            background: white;
+            border: 2px solid var(--sage);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .selection-summary.visible {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+        
+        .summary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+        
+        .summary-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+        
+        .selected-tags {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+        
+        .selected-tag {
+            background: rgba(122, 158, 126, 0.12);
+            color: var(--sage-dark);
+            border: 1px solid rgba(122, 158, 126, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        /* Additional info section */
+        
+        .info-section {
+            background: var(--charcoal);
+            color: white;
+            padding: 5rem 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .info-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+        
+        .info-content p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cert-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .cert-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        
+        .cert-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cert-card h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .cert-card p {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .care-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .care-grid {
+                grid-template-columns: 1fr;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .cert-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="nav-placeholder"></div>
+
+    <div class="page-hero">
+        <div class="section-label" style="color:rgba(255,255,255,0.7);margin-bottom:0.5rem;">What We Offer</div>
+        <h1>Our Care Services</h1>
+        <p>Select the care types that suit your loved one's needs. Mix and match services for a personalized care plan.</p>
+    </div>
+
+    <section class="services-main">
+        <div class="container">
+
+            <div class="checklist-intro">
+                <div class="section-label">Care Type Checklist</div>
+                <h2 class="section-title">Select the Services You Need</h2>
+                <p class="section-subtitle">Choose one or more care types. Your selections will guide us in matching you with the most qualified caregivers.</p>
+            </div>
+
+            <div class="care-grid">
+
+                <!-- Medical Care -->
+                <div class="care-option">
+                    <input type="checkbox" id="medical" name="care" value="Medical Care" data-price="28">
+                    <label class="care-label" for="medical">
+            <div class="care-label-header">
+              <div class="care-icon-wrap">💊</div>
+              <div class="check-indicator"></div>
+            </div>
+            <h3>Medical Care</h3>
+            <ul class="features-list">
+              <li>Medication administration & reminders</li>
+              <li>Vital signs monitoring</li>
+              <li>Wound care & dressing changes</li>
+              <li>Doctor appointment coordination</li>
+              <li>Medical equipment assistance</li>
+            </ul>
+            <div class="care-meta">
+              <span class="care-price">From $28/hr</span>
+              <span class="care-badge">RN Supervised</span>
+            </div>
+          </label>
+                </div>
+
+                <!-- Companion Care -->
+                <div class="care-option">
+                    <input type="checkbox" id="companion" name="care" value="Companion Care" data-price="18">
+                    <label class="care-label" for="companion">
+            <div class="care-label-header">
+              <div class="care-icon-wrap">🤝</div>
+              <div class="check-indicator"></div>
+            </div>
+            <h3>Companion Care</h3>
+            <ul class="features-list">
+              <li>Social engagement & conversation</li>
+              <li>Light housekeeping & laundry</li>
+              <li>Meal preparation & nutrition</li>
+              <li>Transportation & errands</li>
+              <li>Hobby & activity support</li>
+            </ul>
+            <div class="care-meta">
+              <span class="care-price">From $18/hr</span>
+              <span class="care-badge">Most Popular</span>
+            </div>
+          </label>
+                </div>
+
+                <!-- Post-Surgery -->
+                <div class="care-option">
+                    <input type="checkbox" id="postsurgery" name="care" value="Post-Surgery Care" data-price="32">
+                    <label class="care-label" for="postsurgery">
+            <div class="care-label-header">
+              <div class="care-icon-wrap">🏥</div>
+              <div class="check-indicator"></div>
+            </div>
+            <h3>Post-Surgery Care</h3>
+            <ul class="features-list">
+              <li>Incision & wound monitoring</li>
+              <li>Physical therapy exercises</li>
+              <li>Mobility & transfer assistance</li>
+              <li>Pain management support</li>
+              <li>Post-op diet compliance</li>
+            </ul>
+            <div class="care-meta">
+              <span class="care-price">From $32/hr</span>
+              <span class="care-badge">Specialized</span>
+            </div>
+          </label>
+                </div>
+
+                <!-- Overnight -->
+                <div class="care-option">
+                    <input type="checkbox" id="overnight" name="care" value="Overnight Care" data-price="0" data-overnight="true">
+                    <label class="care-label" for="overnight">
+            <div class="care-label-header">
+              <div class="care-icon-wrap">🌙</div>
+              <div class="check-indicator"></div>
+            </div>
+            <h3>Overnight Care</h3>
+            <ul class="features-list">
+              <li>Awake overnight supervision</li>
+              <li>Emergency response ready</li>
+              <li>Bathroom & repositioning help</li>
+              <li>Safety monitoring & fall prevention</li>
+              <li>Morning routine assistance</li>
+            </ul>
+            <div class="care-meta">
+              <span class="care-price">+$120 premium</span>
+              <span class="care-badge">Add-on</span>
+            </div>
+          </label>
+                </div>
+
+                <!-- Dementia -->
+                <div class="care-option">
+                    <input type="checkbox" id="dementia" name="care" value="Dementia Support" data-price="30">
+                    <label class="care-label" for="dementia">
+            <div class="care-label-header">
+              <div class="care-icon-wrap">🧠</div>
+              <div class="check-indicator"></div>
+            </div>
+            <h3>Dementia Support</h3>
+            <ul class="features-list">
+              <li>Memory care techniques</li>
+              <li>Behavioral management support</li>
+              <li>Cognitive engagement activities</li>
+              <li>Wandering prevention & safety</li>
+              <li>Caregiver family coaching</li>
+            </ul>
+            <div class="care-meta">
+              <span class="care-price">From $30/hr</span>
+              <span class="care-badge">Certified Staff</span>
+            </div>
+          </label>
+                </div>
+
+                <!-- Rehab -->
+                <div class="care-option">
+                    <input type="checkbox" id="rehab" name="care" value="Rehabilitation Support" data-price="25">
+                    <label class="care-label" for="rehab">
+            <div class="care-label-header">
+              <div class="care-icon-wrap">🏃</div>
+              <div class="check-indicator"></div>
+            </div>
+            <h3>Rehabilitation Support</h3>
+            <ul class="features-list">
+              <li>Home exercise program assistance</li>
+              <li>Fall prevention training</li>
+              <li>Gait & balance support</li>
+              <li>Adaptive equipment guidance</li>
+              <li>PT/OT coordination</li>
+            </ul>
+            <div class="care-meta">
+              <span class="care-price">From $25/hr</span>
+              <span class="care-badge">PT Trained</span>
+            </div>
+          </label>
+                </div>
+
+            </div>
+
+            <!-- Dynamic Summary -->
+            <div class="selection-summary" id="selectionSummary">
+                <div class="summary-header">
+                    <h3>✓ Your Selected Services</h3>
+                    <a href="booking.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.88rem;">Book These Services →</a>
+                </div>
+                <div class="selected-tags" id="selectedTags"></div>
+                <p style="color:var(--muted);font-size:0.875rem;">Starting rate based on selections — exact pricing calculated at booking.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="info-section">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-content">
+                    <div class="section-label" style="color:var(--sage-light)">Our Standards</div>
+                    <h2>Every Caregiver Meets Rigorous Standards</h2>
+                    <p>We never compromise on quality. Every ElderCare professional undergoes extensive background checks, training verification, and ongoing performance reviews.</p>
+                    <a href="caregivers.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.4);color:white;">Meet Our Caregivers</a>
+                </div>
+                <div class="cert-grid">
+                    <div class="cert-card">
+                        <div class="cert-icon">🛡️</div>
+                        <h4>Background Verified</h4>
+                        <p>FBI-level background checks on every caregiver</p>
+                    </div>
+                    <div class="cert-card">
+                        <div class="cert-icon">🎓</div>
+                        <h4>Certified Training</h4>
+                        <p>CNA, HHA, and CPR certifications required</p>
+                    </div>
+                    <div class="cert-card">
+                        <div class="cert-icon">💉</div>
+                        <h4>Health Screened</h4>
+                        <p>Annual health screenings and TB testing</p>
+                    </div>
+                    <div class="cert-card">
+                        <div class="cert-icon">⭐</div>
+                        <h4>Performance Rated</h4>
+                        <p>Regular client reviews and quality audits</p>
+                    </div>
+                    <div class="cert-card">
+                        <div class="cert-icon">📋</div>
+                        <h4>Insured & Bonded</h4>
+                        <p>Full liability coverage on every shift</p>
+                    </div>
+                    <div class="cert-card">
+                        <div class="cert-icon">🔄</div>
+                        <h4>Continuing Education</h4>
+                        <p>12+ hours annual training hours required</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    <script src="shared.js"></script>
+    <script>
+        const checkboxes = document.querySelectorAll('.care-option input[type="checkbox"]');
+        const summary = document.getElementById('selectionSummary');
+        const tagsContainer = document.getElementById('selectedTags');
+
+        function updateSummary() {
+            const selected = Array.from(checkboxes).filter(c => c.checked);
+
+            if (selected.length === 0) {
+                summary.classList.remove('visible');
+                return;
+            }
+
+            summary.classList.add('visible');
+            tagsContainer.innerHTML = selected.map(c =>
+                `<span class="selected-tag">✓ ${c.value}</span>`
+            ).join('');
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateSummary));
+    </script>
+</body>
+
+</html>
