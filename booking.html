@@ -1,1091 +1,975 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book a Caregiver ElderCare</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .booking-section {
-            padding: 4rem 0;
-        }
-        
-        .booking-layout {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 2.5rem;
-            align-items: start;
-        }
-        /* Form Card */
-        
-        .form-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        
-        .form-section-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--sage-dark);
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--charcoal);
-            margin-bottom: 0.5rem;
-        }
-        
-        .form-group label span {
-            color: var(--sage-dark);
-            margin-left: 2px;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: 'DM Sans', sans-serif;
-            color: var(--charcoal);
-            background: var(--cream);
-            transition: all 0.2s;
-            outline: none;
-        }
-        
-        .form-control:focus {
-            border-color: var(--sage);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(122, 158, 126, 0.12);
-        }
-        
-        .form-control.error {
-            border-color: #e05555;
-            background: rgba(224, 85, 85, 0.04);
-        }
-        
-        .error-msg {
-            font-size: 0.78rem;
-            color: #e05555;
-            margin-top: 0.4rem;
-            display: none;
-        }
-        
-        .error-msg.show {
-            display: block;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
-        }
-        /* Care type checkboxes in booking */
-        
-        .care-checkboxes {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.65rem;
-        }
-        
-        .care-check-item {
-            position: relative;
-        }
-        
-        .care-check-item input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .care-check-label {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.65rem 0.9rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--muted);
-        }
-        
-        .care-check-label:hover {
-            border-color: var(--sage-light);
-            color: var(--charcoal);
-        }
-        
-        .care-check-item input:checked+.care-check-label {
-            border-color: var(--sage-dark);
-            background: rgba(78, 114, 84, 0.06);
-            color: var(--sage-dark);
-        }
-        
-        .checkmark {
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--border);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.2s;
-            font-size: 0.65rem;
-        }
-        
-        .care-check-item input:checked+.care-check-label .checkmark {
-            background: var(--sage-dark);
-            border-color: var(--sage-dark);
-            color: white;
-        }
-        /* Duration slider */
-        
-        .duration-control {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .duration-control input[type="range"] {
-            flex: 1;
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: linear-gradient(to right, var(--sage-dark) 0%, var(--sage-dark) var(--value, 50%), var(--border) var(--value, 50%), var(--border) 100%);
-            outline: none;
-        }
-        
-        .duration-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--sage-dark);
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(78, 114, 84, 0.35);
-            border: 3px solid white;
-        }
-        
-        .duration-display {
-            background: var(--sage-dark);
-            color: white;
-            padding: 0.4rem 0.85rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            min-width: 60px;
-            text-align: center;
-            white-space: nowrap;
-        }
-        
-        .duration-hint {
-            font-size: 0.78rem;
-            color: var(--muted);
-            margin-top: 0.4rem;
-        }
-        /* Overnight toggle */
-        
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.25rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .toggle-row:hover {
-            border-color: var(--sage-light);
-        }
-        
-        .toggle-row.on {
-            border-color: var(--gold);
-            background: rgba(201, 168, 76, 0.06);
-        }
-        
-        .toggle-info h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--charcoal);
-            margin-bottom: 0.15rem;
-        }
-        
-        .toggle-info p {
-            font-size: 0.78rem;
-            color: var(--muted);
-        }
-        
-        .toggle-switch {
-            width: 44px;
-            height: 24px;
-            background: var(--border);
-            border-radius: 12px;
-            position: relative;
-            transition: background 0.25s;
-            flex-shrink: 0;
-        }
-        
-        .toggle-switch.on {
-            background: var(--gold);
-        }
-        
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: white;
-            transition: left 0.25s;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .toggle-switch.on::after {
-            left: 23px;
-        }
-        /* Caregiver selector */
-        
-        .caregiver-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-        }
-        
-        .cg-option {
-            position: relative;
-        }
-        
-        .cg-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-        }
-        
-        .cg-label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.85rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .cg-label:hover {
-            border-color: var(--sage-light);
-        }
-        
-        .cg-option input:checked+.cg-label {
-            border-color: var(--sage-dark);
-            background: rgba(78, 114, 84, 0.05);
-        }
-        
-        .cg-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--sage), var(--blush));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        
-        .cg-label-info h4 {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--charcoal);
-            margin-bottom: 0.15rem;
-        }
-        
-        .cg-label-info p {
-            font-size: 0.75rem;
-            color: var(--muted);
-        }
-        
-        .cg-rate {
-            margin-left: auto;
-            font-weight: 700;
-            color: var(--sage-dark);
-            font-size: 0.88rem;
-            white-space: nowrap;
-        }
-        /* SUMMARY PANEL */
-        
-        .summary-panel {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 100px;
-        }
-        
-        .summary-header-bar {
-            background: linear-gradient(135deg, var(--sage-dark), var(--charcoal));
-            color: white;
-            padding: 1.5rem 1.75rem;
-        }
-        
-        .summary-header-bar h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .summary-header-bar p {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        
-        .summary-body {
-            padding: 1.5rem;
-        }
-        
-        .summary-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.88rem;
-        }
-        
-        .summary-line:last-of-type {
-            border-bottom: none;
-        }
-        
-        .summary-line .label {
-            color: var(--muted);
-        }
-        
-        .summary-line .value {
-            font-weight: 600;
-            color: var(--charcoal);
-        }
-        
-        .summary-overnight-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            background: rgba(201, 168, 76, 0.08);
-            border: 1px solid rgba(201, 168, 76, 0.25);
-            border-radius: 8px;
-            margin: 0.5rem 0;
-            font-size: 0.85rem;
-            display: none;
-        }
-        
-        .summary-overnight-line.show {
-            display: flex;
-        }
-        
-        .overnight-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #8a6200;
-            font-weight: 600;
-        }
-        
-        .overnight-value {
-            font-weight: 700;
-            color: #8a6200;
-        }
-        
-        .summary-total {
-            background: linear-gradient(135deg, rgba(78, 114, 84, 0.08), rgba(78, 114, 84, 0.03));
-            border: 2px solid rgba(78, 114, 84, 0.2);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        
-        .total-label {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 0.35rem;
-        }
-        
-        .total-amount {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: var(--sage-dark);
-            line-height: 1;
-        }
-        
-        .total-note {
-            font-size: 0.75rem;
-            color: var(--muted);
-            margin-top: 0.35rem;
-        }
-        
-        .summary-submit {
-            margin-top: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .summary-submit .btn {
-            width: 100%;
-            justify-content: center;
-            padding: 0.9rem;
-        }
-        
-        .trust-mini {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-        
-        .trust-mini span {
-            font-size: 0.72rem;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        /* Confirmation */
-        
-        .confirmation-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(44, 62, 53, 0.6);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        
-        .confirmation-overlay.show {
-            display: flex;
-        }
-        
-        .confirm-card {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 480px;
-            width: 100%;
-            text-align: center;
-            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        @keyframes popIn {
-            from {
-                opacity: 0;
-                transform: scale(0.85);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        .confirm-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--sage), var(--sage-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1.5rem;
-        }
-        
-        .confirm-card h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--charcoal);
-            margin-bottom: 0.75rem;
-        }
-        
-        .confirm-card p {
-            color: var(--muted);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-        
-        .confirm-details {
-            background: var(--cream);
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-align: left;
-            margin-bottom: 1.75rem;
-        }
-        
-        .confirm-details p {
-            color: var(--charcoal);
-            font-size: 0.875rem;
-            margin-bottom: 0.35rem;
-        }
-        
-        .confirm-details p:last-child {
-            margin-bottom: 0;
-        }
-        
-        .confirm-details strong {
-            color: var(--sage-dark);
-        }
-        
-        @media (max-width: 1024px) {
-            .booking-layout {
-                grid-template-columns: 1fr;
-            }
-            .summary-panel {
-                position: static;
-            }
-            .care-checkboxes {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .care-checkboxes {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .form-card {
-                padding: 1.5rem;
-            }
-            .care-checkboxes {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Caregiver – ElderCare</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
 
+    .booking-section { padding: 4rem 0; }
+
+    /* Two-column layout: form left, summary right */
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* ---- FORM CARD ---- */
+    .form-card {
+      background-color: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green-dark);
+      margin-bottom: 1.1rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.45rem;
+    }
+
+    .form-group label .req { color: var(--green-dark); }
+
+    .form-input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: 'Nunito', sans-serif;
+      color: var(--charcoal);
+      background-color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--green);
+      background-color: white;
+    }
+
+    /* Red border on invalid */
+    .form-input.invalid { border-color: #e05555; background-color: rgba(224,85,85,0.04); }
+
+    .err-msg {
+      font-size: 0.77rem;
+      color: #e05555;
+      margin-top: 0.35rem;
+      display: none;   /* JS sets this to "block" when needed */
+    }
+
+    /* Two inputs side by side */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+    }
+
+    /* ---- CARE TYPE CHECKBOXES ---- */
+    .care-check-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.55rem;
+    }
+
+    .cc-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .cc-item { position: relative; }
+
+    .cc-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--grey);
+      transition: all 0.2s;
+    }
+
+    .cc-label:hover { border-color: var(--green-light); color: var(--charcoal); }
+
+    .cc-item input:checked + .cc-label {
+      border-color: var(--green-dark);
+      color: var(--green-dark);
+      background-color: rgba(61,107,79,0.06);
+    }
+
+    .cc-tick {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: white;
+      flex-shrink: 0;
+      transition: all 0.18s;
+    }
+
+    .cc-item input:checked + .cc-label .cc-tick {
+      background-color: var(--green-dark);
+      border-color: var(--green-dark);
+    }
+
+    .cc-tick::after { content: '✓'; opacity: 0; transition: opacity 0.15s; }
+    .cc-item input:checked + .cc-label .cc-tick::after { opacity: 1; }
+
+    /* ---- OVERNIGHT TOGGLE ---- */
+    .overnight-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.95rem 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .overnight-row:hover { border-color: var(--gold); }
+    .overnight-row.on { border-color: var(--gold); background-color: rgba(201,168,76,0.05); }
+
+    .overnight-info h4 { font-size: 0.88rem; font-weight: 700; color: var(--charcoal); margin-bottom: 0.1rem; }
+    .overnight-info p  { font-size: 0.76rem; color: var(--grey); }
+
+    .toggle-pill {
+      width: 42px;
+      height: 23px;
+      background-color: var(--border);
+      border-radius: 11px;
+      position: relative;
+      transition: background-color 0.25s;
+      flex-shrink: 0;
+    }
+
+    .toggle-pill.on { background-color: var(--gold); }
+
+    .toggle-pill::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+      transition: left 0.25s;
+    }
+
+    .toggle-pill.on::after { left: 22px; }
+
+    /* ---- SUMMARY PANEL ---- */
+    .summary-panel {
+      background-color: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 90px;
+    }
+
+    .sum-header {
+      background: linear-gradient(135deg, var(--green-dark), var(--charcoal));
+      color: white;
+      padding: 1.4rem 1.6rem;
+    }
+
+    .sum-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .sum-header p { font-size: 0.78rem; opacity: 0.68; }
+
+    .sum-body { padding: 1.4rem; }
+
+    .sum-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sum-line:last-of-type { border-bottom: none; }
+    .sum-line .s-label { color: var(--grey); }
+    .sum-line .s-value { font-weight: 700; color: var(--charcoal); }
+
+    /* Overnight line — hidden unless overnight is on */
+    .sum-overnight {
+      display: none;   /* JS sets to "flex" when overnight is toggled */
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.84rem;
+      margin: 0.5rem 0;
+    }
+
+    .sum-overnight .ov-label { color: #7a5e00; font-weight: 700; }
+    .sum-overnight .ov-val   { color: #7a5e00; font-weight: 700; }
+
+    .sum-total-box {
+      background: linear-gradient(135deg, rgba(61,107,79,0.07), rgba(61,107,79,0.02));
+      border: 2px solid rgba(61,107,79,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: center;
+      margin-top: 0.85rem;
+    }
+
+    .sum-total-label {
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--grey);
+      margin-bottom: 0.3rem;
+    }
+
+    .sum-total-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1;
+    }
+
+    .sum-formula {
+      font-size: 0.73rem;
+      color: var(--grey);
+      margin-top: 0.3rem;
+    }
+
+    .sum-footer {
+      margin-top: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .sum-footer .btn { width: 100%; text-align: center; }
+
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .trust-row span {
+      font-size: 0.7rem;
+      color: var(--grey);
+    }
+
+    /* ---- CONFIRMATION POPUP ---- */
+    .popup-overlay {
+      display: none;    /* JS changes to "flex" on submit */
+      position: fixed;
+      inset: 0;
+      background-color: rgba(42,56,48,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .popup-card {
+      background-color: white;
+      border-radius: 18px;
+      padding: 2.5rem;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      animation: popUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popUp {
+      from { opacity: 0; transform: scale(0.82); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .popup-icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 1.25rem;
+    }
+
+    .popup-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--charcoal);
+      margin-bottom: 0.65rem;
+    }
+
+    .popup-card p { font-size: 0.9rem; color: var(--grey); line-height: 1.7; margin-bottom: 1.25rem; }
+
+    .popup-details {
+      background-color: var(--cream);
+      border-radius: 10px;
+      padding: 1.1rem;
+      text-align: left;
+      margin-bottom: 1.5rem;
+      font-size: 0.84rem;
+    }
+
+    .popup-details p { color: var(--charcoal); margin-bottom: 0.3rem; }
+    .popup-details strong { color: var(--green-dark); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .booking-layout { grid-template-columns: 1fr; }
+      .summary-panel  { position: static; }
+      .care-check-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+      .care-check-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .form-card { padding: 1.4rem; }
+      .care-check-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
 <body>
 
-    <div id="nav-placeholder"></div>
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">🌿 Elder<span class="dot">Care</span></a>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="caregivers.html">Caregivers</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="booking.html" class="nav-book-btn active">Book Now</a></li>
+    </ul>
+    <button class="hamburger-btn" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-    <div class="page-hero">
-        <div class="section-label" style="color:rgba(255,255,255,0.7)">Simple Booking</div>
-        <h1>Book Your Caregiver</h1>
-        <p>Fill in the details below and we'll confirm your booking within minutes. Same-day service available.</p>
-    </div>
+  <!-- PAGE BANNER -->
+  <div class="page-banner">
+    <h1>Book a Caregiver</h1>
+    <p>Fill in the details below and we'll confirm your booking within minutes.</p>
+  </div>
 
-    <section class="booking-section">
-        <div class="container">
-            <div class="booking-layout">
+  <section class="booking-section">
+    <div class="container">
+      <div class="booking-layout">
 
-                <!-- FORM -->
-                <div>
-                    <div class="form-card">
+        <!-- ===== FORM ===== -->
+        <div class="form-card">
 
-                        <!-- Section 1: Personal Info -->
-                        <div class="form-section-title">01 — Your Information</div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="firstName">First Name <span>*</span></label>
-                                <input type="text" id="firstName" class="form-control" placeholder="e.g. Rajesh">
-                                <div class="error-msg" id="err-firstName">Please enter your first name</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">Last Name <span>*</span></label>
-                                <input type="text" id="lastName" class="form-control" placeholder="e.g. Kumar">
-                                <div class="error-msg" id="err-lastName">Please enter your last name</div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="email">Email Address <span>*</span></label>
-                                <input type="email" id="email" class="form-control" placeholder="your@email.com">
-                                <div class="error-msg" id="err-email">Please enter a valid email</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number <span>*</span></label>
-                                <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210">
-                                <div class="error-msg" id="err-phone">Please enter your phone number</div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Care Address <span>*</span></label>
-                            <input type="text" id="address" class="form-control" placeholder="Enter the address where care will be provided">
-                            <div class="error-msg" id="err-address">Please enter the care address</div>
-                        </div>
+          <!-- Section 1: Your Info -->
+          <div class="form-section-title">01 — Your Information</div>
 
-                        <!-- Section 2: Care Type -->
-                        <div class="form-section-title" style="margin-top:2rem">02 — Care Type</div>
-                        <div class="form-group">
-                            <label>Select Care Services <span>*</span></label>
-                            <div class="care-checkboxes">
-                                <div class="care-check-item">
-                                    <input type="checkbox" id="b-medical" value="Medical Care" data-rate="28">
-                                    <label class="care-check-label" for="b-medical">
-                    <span class="checkmark">✓</span>💊 Medical Care
-                  </label>
-                                </div>
-                                <div class="care-check-item">
-                                    <input type="checkbox" id="b-companion" value="Companion Care" data-rate="18">
-                                    <label class="care-check-label" for="b-companion">
-                    <span class="checkmark">✓</span>🤝 Companion Care
-                  </label>
-                                </div>
-                                <div class="care-check-item">
-                                    <input type="checkbox" id="b-postsurgery" value="Post-Surgery" data-rate="32">
-                                    <label class="care-check-label" for="b-postsurgery">
-                    <span class="checkmark">✓</span>🏥 Post-Surgery
-                  </label>
-                                </div>
-                                <div class="care-check-item">
-                                    <input type="checkbox" id="b-dementia" value="Dementia Care" data-rate="30">
-                                    <label class="care-check-label" for="b-dementia">
-                    <span class="checkmark">✓</span>🧠 Dementia Care
-                  </label>
-                                </div>
-                                <div class="care-check-item">
-                                    <input type="checkbox" id="b-rehab" value="Rehabilitation" data-rate="25">
-                                    <label class="care-check-label" for="b-rehab">
-                    <span class="checkmark">✓</span>🏃 Rehabilitation
-                  </label>
-                                </div>
-                            </div>
-                            <div class="error-msg" id="err-caretype">Please select at least one care type</div>
-                        </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name <span class="req">*</span></label>
+              <input type="text" class="form-input" id="inp-fname" placeholder="e.g. Rajesh" />
+              <div class="err-msg" id="err-fname">Please enter your first name</div>
+            </div>
+            <div class="form-group">
+              <label>Last Name <span class="req">*</span></label>
+              <input type="text" class="form-input" id="inp-lname" placeholder="e.g. Kumar" />
+              <div class="err-msg" id="err-lname">Please enter your last name</div>
+            </div>
+          </div>
 
-                        <!-- Overnight Toggle -->
-                        <div class="form-group">
-                            <label>Overnight Care Add-on</label>
-                            <div class="toggle-row" id="overnightToggle">
-                                <div class="toggle-info">
-                                    <h4>🌙 Add Overnight Care</h4>
-                                    <p>Awake overnight supervision — additional $120 premium per night</p>
-                                </div>
-                                <div class="toggle-switch" id="overnightSwitch"></div>
-                            </div>
-                        </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address <span class="req">*</span></label>
+              <input type="email" class="form-input" id="inp-email" placeholder="you@email.com" />
+              <div class="err-msg" id="err-email">Please enter a valid email</div>
+            </div>
+            <div class="form-group">
+              <label>Phone Number <span class="req">*</span></label>
+              <input type="tel" class="form-input" id="inp-phone" placeholder="+91 98765 43210" />
+              <div class="err-msg" id="err-phone">Please enter your phone number</div>
+            </div>
+          </div>
 
-                        <!-- Section 3: Scheduling -->
-                        <div class="form-section-title" style="margin-top:2rem">03 — Schedule & Duration</div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="startDate">Start Date <span>*</span></label>
-                                <input type="date" id="startDate" class="form-control">
-                                <div class="error-msg" id="err-startDate">Please select a start date</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="startTime">Preferred Start Time <span>*</span></label>
-                                <select id="startTime" class="form-control">
-                  <option value="">Select time</option>
-                  <option>6:00 AM</option>
-                  <option>7:00 AM</option>
-                  <option>8:00 AM</option>
-                  <option>9:00 AM</option>
-                  <option>10:00 AM</option>
-                  <option>11:00 AM</option>
-                  <option>12:00 PM</option>
-                  <option>1:00 PM</option>
-                  <option>2:00 PM</option>
-                  <option>3:00 PM</option>
-                  <option>4:00 PM</option>
-                  <option>5:00 PM</option>
-                  <option>6:00 PM</option>
-                </select>
-                                <div class="error-msg" id="err-startTime">Please select a start time</div>
-                            </div>
-                        </div>
+          <div class="form-group">
+            <label>Care Address <span class="req">*</span></label>
+            <input type="text" class="form-input" id="inp-address" placeholder="Address where care will take place" />
+            <div class="err-msg" id="err-address">Please enter the care address</div>
+          </div>
 
-                        <!-- Duration Slider -->
-                        <div class="form-group">
-                            <label>Care Duration <span>*</span></label>
-                            <div class="duration-control">
-                                <input type="range" id="durationSlider" min="1" max="12" value="4" step="1">
-                                <div class="duration-display" id="durationDisplay">4 hrs</div>
-                            </div>
-                            <div class="duration-hint">Minimum 1 hour · Maximum 12 hours per session</div>
-                            <div class="error-msg" id="err-duration">Duration must be at least 1 hour</div>
-                        </div>
+          <!-- Section 2: Care Type -->
+          <div class="form-section-title" style="margin-top:1.75rem">02 — Care Type</div>
 
-                        <!-- Section 4: Caregiver -->
-                        <div class="form-section-title" style="margin-top:2rem">04 — Choose Caregiver</div>
-                        <div class="caregiver-options">
-                            <div class="cg-option">
-                                <input type="radio" name="caregiver" id="cg-any" value="Best Match" checked>
-                                <label class="cg-label" for="cg-any">
-                  <div class="cg-avatar">⭐</div>
-                  <div class="cg-label-info">
-                    <h4>Best Match (Recommended)</h4>
-                    <p>We'll assign the highest-rated available caregiver</p>
-                  </div>
-                  <span class="cg-rate">Auto</span>
+          <div class="form-group">
+            <label>Select Services <span class="req">*</span></label>
+            <div class="care-check-grid">
+
+              <div class="cc-item">
+                <input type="checkbox" id="c-medical" value="Medical Care" />
+                <label class="cc-label" for="c-medical">
+                  <span class="cc-tick"></span>💊 Medical
                 </label>
-                            </div>
-                            <div class="cg-option">
-                                <input type="radio" name="caregiver" id="cg-sarah" value="Sarah Mathews" data-rate="28">
-                                <label class="cg-label" for="cg-sarah">
-                  <div class="cg-avatar">👩‍⚕️</div>
-                  <div class="cg-label-info">
-                    <h4>Sarah Mathews</h4>
-                    <p>Medical Specialist · 12 yrs · ⭐ 4.9</p>
-                  </div>
-                  <span class="cg-rate">$28/hr</span>
+              </div>
+
+              <div class="cc-item">
+                <input type="checkbox" id="c-companion" value="Companion Care" />
+                <label class="cc-label" for="c-companion">
+                  <span class="cc-tick"></span>🤝 Companion
                 </label>
-                            </div>
-                            <div class="cg-option">
-                                <input type="radio" name="caregiver" id="cg-rajan" value="Dr. Rajan Pillai" data-rate="32">
-                                <label class="cg-label" for="cg-rajan">
-                  <div class="cg-avatar">👨‍⚕️</div>
-                  <div class="cg-label-info">
-                    <h4>Dr. Rajan Pillai</h4>
-                    <p>Post-Surgery Spec. · 8 yrs · ⭐ 4.8</p>
-                  </div>
-                  <span class="cg-rate">$32/hr</span>
+              </div>
+
+              <div class="cc-item">
+                <input type="checkbox" id="c-surgery" value="Post-Surgery" />
+                <label class="cc-label" for="c-surgery">
+                  <span class="cc-tick"></span>🏥 Post-Surgery
                 </label>
-                            </div>
-                            <div class="cg-option">
-                                <input type="radio" name="caregiver" id="cg-meena" value="Meena Krishnan" data-rate="30">
-                                <label class="cg-label" for="cg-meena">
-                  <div class="cg-avatar">👩</div>
-                  <div class="cg-label-info">
-                    <h4>Meena Krishnan</h4>
-                    <p>Dementia Specialist · 15 yrs · ⭐ 5.0</p>
-                  </div>
-                  <span class="cg-rate">$30/hr</span>
+              </div>
+
+              <div class="cc-item">
+                <input type="checkbox" id="c-dementia" value="Dementia Care" />
+                <label class="cc-label" for="c-dementia">
+                  <span class="cc-tick"></span>🧠 Dementia
                 </label>
-                            </div>
-                        </div>
+              </div>
 
-                        <!-- Notes -->
-                        <div class="form-group" style="margin-top:1.5rem">
-                            <label for="notes">Special Instructions (Optional)</label>
-                            <textarea id="notes" class="form-control" rows="3" placeholder="Any special needs, medical conditions, or preferences we should know about..."></textarea>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- SUMMARY PANEL -->
-                <div>
-                    <div class="summary-panel">
-                        <div class="summary-header-bar">
-                            <h3>Booking Summary</h3>
-                            <p>Updates in real-time as you fill in the form</p>
-                        </div>
-                        <div class="summary-body">
-
-                            <div class="summary-line">
-                                <span class="label">Care Type</span>
-                                <span class="value" id="sum-caretype">—</span>
-                            </div>
-                            <div class="summary-line">
-                                <span class="label">Caregiver</span>
-                                <span class="value" id="sum-caregiver">Best Match</span>
-                            </div>
-                            <div class="summary-line">
-                                <span class="label">Date</span>
-                                <span class="value" id="sum-date">—</span>
-                            </div>
-                            <div class="summary-line">
-                                <span class="label">Start Time</span>
-                                <span class="value" id="sum-time">—</span>
-                            </div>
-                            <div class="summary-line">
-                                <span class="label">Duration</span>
-                                <span class="value" id="sum-duration">4 hours</span>
-                            </div>
-                            <div class="summary-line">
-                                <span class="label">Hourly Rate</span>
-                                <span class="value" id="sum-rate">—</span>
-                            </div>
-
-                            <div class="summary-overnight-line" id="sum-overnight-row">
-                                <span class="overnight-label">🌙 Overnight Premium</span>
-                                <span class="overnight-value">+$120</span>
-                            </div>
-
-                            <div class="summary-total">
-                                <div class="total-label">Total Estimated Cost</div>
-                                <div class="total-amount" id="sum-total">$0</div>
-                                <div class="total-note" id="sum-formula">Select care type & duration to calculate</div>
-                            </div>
-
-                            <div class="summary-submit">
-                                <button class="btn btn-primary" onclick="submitBooking()">Confirm Booking →</button>
-                                <div class="trust-mini">
-                                    <span>🔒 Secure</span>
-                                    <span>✓ Verified Caregivers</span>
-                                    <span>📞 Instant Confirmation</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <div class="cc-item">
+                <input type="checkbox" id="c-rehab" value="Rehabilitation" />
+                <label class="cc-label" for="c-rehab">
+                  <span class="cc-tick"></span>🏃 Rehab
+                </label>
+              </div>
 
             </div>
-        </div>
-    </section>
+            <div class="err-msg" id="err-care">Please select at least one service</div>
+          </div>
 
-    <!-- Confirmation Modal -->
-    <div class="confirmation-overlay" id="confirmModal">
-        <div class="confirm-card">
-            <div class="confirm-icon">✅</div>
-            <h2>Booking Confirmed!</h2>
-            <p>Your caregiver has been booked successfully. You'll receive an email confirmation shortly with all details.</p>
-            <div class="confirm-details" id="confirmDetails"></div>
-            <a href="index.html" class="btn btn-primary" style="width:100%;justify-content:center;">Return to Home →</a>
-        </div>
+          <!-- Overnight toggle -->
+          <div class="form-group">
+            <label>Overnight Add-on</label>
+            <div class="overnight-row" id="overnight-row" onclick="toggleOvernight()">
+              <div class="overnight-info">
+                <h4>🌙 Add Overnight Care</h4>
+                <p>Awake overnight supervision — +$120 flat premium per night</p>
+              </div>
+              <div class="toggle-pill" id="toggle-pill"></div>
+            </div>
+          </div>
+
+          <!-- Section 3: Schedule -->
+          <div class="form-section-title" style="margin-top:1.75rem">03 — Schedule</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Start Date <span class="req">*</span></label>
+              <input type="date" class="form-input" id="inp-date" />
+              <div class="err-msg" id="err-date">Please select a date</div>
+            </div>
+            <div class="form-group">
+              <label>Start Time <span class="req">*</span></label>
+              <select class="form-input" id="inp-time" onchange="updateSummary()">
+                <option value="">Choose a time...</option>
+                <option>6:00 AM</option>
+                <option>7:00 AM</option>
+                <option>8:00 AM</option>
+                <option>9:00 AM</option>
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>12:00 PM</option>
+                <option>1:00 PM</option>
+                <option>2:00 PM</option>
+                <option>3:00 PM</option>
+                <option>4:00 PM</option>
+                <option>5:00 PM</option>
+                <option>6:00 PM</option>
+              </select>
+              <div class="err-msg" id="err-time">Please select a time</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Duration (Hours) <span class="req">*</span> &nbsp;
+                <span style="font-weight:400;color:var(--grey)">min 1 · max 12</span>
+              </label>
+              <input type="number" class="form-input" id="inp-hours"
+                     value="4" min="1" max="12"
+                     onchange="updateSummary()" oninput="updateSummary()" />
+              <div class="err-msg" id="err-hours">Duration must be between 1 and 12 hours</div>
+            </div>
+            <div class="form-group">
+              <label>Hourly Rate <span class="req">*</span></label>
+              <select class="form-input" id="inp-rate" onchange="updateSummary()">
+                <option value="18">Companion Care — $18/hr</option>
+                <option value="28" selected>Medical Care — $28/hr</option>
+                <option value="32">Post-Surgery — $32/hr</option>
+                <option value="30">Dementia Care — $30/hr</option>
+                <option value="25">Rehabilitation — $25/hr</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 4: Notes -->
+          <div class="form-section-title" style="margin-top:1.75rem">04 — Additional Notes</div>
+          <div class="form-group">
+            <label>Special Instructions <span style="font-weight:400;color:var(--grey)">(Optional)</span></label>
+            <textarea class="form-input" id="inp-notes" rows="3"
+              placeholder="Any special needs, conditions, or preferences..."></textarea>
+          </div>
+
+        </div><!-- end form-card -->
+
+
+        <!-- ===== SUMMARY PANEL ===== -->
+        <div class="summary-panel">
+          <div class="sum-header">
+            <h3>Booking Summary</h3>
+            <p>Updates as you fill in the form</p>
+          </div>
+          <div class="sum-body">
+
+            <div class="sum-line">
+              <span class="s-label">Care Type</span>
+              <span class="s-value" id="sum-care">—</span>
+            </div>
+            <div class="sum-line">
+              <span class="s-label">Date</span>
+              <span class="s-value" id="sum-date">—</span>
+            </div>
+            <div class="sum-line">
+              <span class="s-label">Start Time</span>
+              <span class="s-value" id="sum-time">—</span>
+            </div>
+            <div class="sum-line">
+              <span class="s-label">Duration</span>
+              <span class="s-value" id="sum-duration">4 hours</span>
+            </div>
+            <div class="sum-line">
+              <span class="s-label">Hourly Rate</span>
+              <span class="s-value" id="sum-rate">$28/hr</span>
+            </div>
+
+            <!-- Hidden overnight line — shown by JS -->
+            <div class="sum-overnight" id="sum-overnight">
+              <span class="ov-label">🌙 Overnight Premium</span>
+              <span class="ov-val">+$120</span>
+            </div>
+
+            <div class="sum-total-box">
+              <div class="sum-total-label">Estimated Total</div>
+              <div class="sum-total-amount" id="sum-total">$112</div>
+              <div class="sum-formula" id="sum-formula">$28 × 4 hrs = $112</div>
+            </div>
+
+            <div class="sum-footer">
+              <!-- onclick calls our submitBooking() function -->
+              <button class="btn btn-green" onclick="submitBooking()">Confirm Booking →</button>
+              <div class="trust-row">
+                <span>🔒 Secure</span>
+                <span>✓ Verified Caregivers</span>
+                <span>📞 Fast Confirmation</span>
+              </div>
+            </div>
+
+          </div>
+        </div><!-- end summary panel -->
+
+      </div><!-- end booking-layout -->
     </div>
+  </section>
 
-    <div id="footer-placeholder"></div>
-    <script src="shared.js"></script>
-    <script>
-        // Set min date to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('startDate').min = today;
 
-        // State
-        let overnightActive = false;
-        let currentHourlyRate = 0;
-        let duration = 4;
+  <!-- ===== CONFIRMATION POPUP ===== -->
+  <div class="popup-overlay" id="popup-overlay">
+    <div class="popup-card">
+      <div class="popup-icon">✅</div>
+      <h2>Booking Confirmed!</h2>
+      <p>Your caregiver has been booked. You'll receive an email confirmation shortly.</p>
+      <!-- JS writes the details into this div -->
+      <div class="popup-details" id="popup-details"></div>
+      <a href="index.html" class="btn btn-green" style="width:100%;display:block;text-align:center;">Return to Home →</a>
+    </div>
+  </div>
 
-        // Overnight toggle
-        const toggleRow = document.getElementById('overnightToggle');
-        const toggleSwitch = document.getElementById('overnightSwitch');
 
-        toggleRow.addEventListener('click', () => {
-            overnightActive = !overnightActive;
-            toggleSwitch.classList.toggle('on', overnightActive);
-            toggleRow.classList.toggle('on', overnightActive);
-            updateSummary();
-        });
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">🌿 ElderCare</div>
+        <p class="footer-desc">Compassionate, professional elderly care. Serving families with heart.</p>
+        <span class="footer-pill">✓ Licensed & Insured</span>
+        <span class="footer-pill">✓ Background Checked</span>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <ul>
+          <li><a href="services.html">Medical Care</a></li>
+          <li><a href="services.html">Companion Care</a></li>
+          <li><a href="services.html">Post-Surgery</a></li>
+          <li><a href="services.html">Overnight Care</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <ul>
+          <li><a href="caregivers.html">Our Caregivers</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 ElderCare. All rights reserved.</p>
+      <div>
+        <span class="footer-pill">HIPAA Compliant</span>
+        <span class="footer-pill">Accredited Agency</span>
+      </div>
+    </div>
+  </footer>
 
-        // Duration slider
-        const slider = document.getElementById('durationSlider');
-        const durationDisplay = document.getElementById('durationDisplay');
 
-        slider.addEventListener('input', () => {
-            duration = parseInt(slider.value);
-            durationDisplay.textContent = duration + ' hr' + (duration > 1 ? 's' : '');
+  <!-- ============================================================
+       JAVASCRIPT — Concepts used:
+       · getElementById()          — find elements by id
+       · .innerHTML                — write content into an element
+       · .style.display            — show / hide elements
+       · .value                    — read input / select values
+       · .checked                  — read checkbox state
+       · .className                — set CSS classes
+       · Variables (var)           — store data
+       · if / else                 — conditional logic
+       · Functions                 — reusable code blocks
+       · Arithmetic (+, *, Number) — calculate the total cost
+       · onclick (in HTML)         — trigger functions on click
+       · onchange / oninput        — trigger on input change
+  ============================================================= -->
+  <script>
 
-            // Update gradient
-            const pct = ((duration - 1) / 11 * 100).toFixed(1);
-            slider.style.setProperty('--value', pct + '%');
-            slider.style.background = `linear-gradient(to right, var(--sage-dark) 0%, var(--sage-dark) ${pct}%, var(--border) ${pct}%, var(--border) 100%)`;
+    // ============ GLOBAL STATE ============
+    // We use a simple variable to track whether overnight is on or off
+    var overnightOn = false;
 
-            updateSummary();
-        });
+    // Set today as the minimum selectable date
+    var today = new Date();
+    var yyyy  = today.getFullYear();
+    var mm    = today.getMonth() + 1;          // months are 0-indexed
+    var dd    = today.getDate();
 
-        // Initialize slider gradient
-        slider.dispatchEvent(new Event('input'));
+    // Pad single digits with a zero: e.g. 5 → "05"
+    if (mm < 10) { mm = "0" + mm; }
+    if (dd < 10) { dd = "0" + dd; }
 
-        // Care type checkboxes
-        document.querySelectorAll('.care-check-item input').forEach(cb => {
-            cb.addEventListener('change', updateSummary);
-        });
+    document.getElementById("inp-date").min = yyyy + "-" + mm + "-" + dd;
 
-        // Caregiver radio
-        document.querySelectorAll('input[name="caregiver"]').forEach(r => {
-            r.addEventListener('change', updateSummary);
-        });
 
-        // Date & time
-        document.getElementById('startDate').addEventListener('change', updateSummary);
-        document.getElementById('startTime').addEventListener('change', updateSummary);
+    // ============ HAMBURGER MENU ============
+    function toggleMenu() {
+      var menu = document.getElementById("nav-menu");
+      if (menu.className === "nav-menu menu-open") {
+        menu.className = "nav-menu";
+      } else {
+        menu.className = "nav-menu menu-open";
+      }
+    }
 
-        function getHighestRate() {
-            const checked = Array.from(document.querySelectorAll('.care-check-item input:checked'));
-            if (checked.length === 0) return 0;
-            const rates = checked.map(c => parseInt(c.dataset.rate));
-            return Math.max(...rates);
+
+    // ============ OVERNIGHT TOGGLE ============
+    function toggleOvernight() {
+      var pill = document.getElementById("toggle-pill");
+      var row  = document.getElementById("overnight-row");
+
+      // Flip the boolean
+      if (overnightOn === false) {
+        overnightOn = true;
+        pill.className = "toggle-pill on";
+        row.className  = "overnight-row on";
+      } else {
+        overnightOn = false;
+        pill.className = "toggle-pill";
+        row.className  = "overnight-row";
+      }
+
+      // Recalculate total after toggling
+      updateSummary();
+    }
+
+
+    // ============ UPDATE SUMMARY PANEL ============
+    // This runs every time the user changes the hours, rate, date or time
+    function updateSummary() {
+
+      // Read current values from the form inputs
+      var hours     = Number(document.getElementById("inp-hours").value);
+      var rate      = Number(document.getElementById("inp-rate").value);
+      var dateVal   = document.getElementById("inp-date").value;
+      var timeVal   = document.getElementById("inp-time").value;
+
+      // Get the selected rate option text (e.g. "Medical Care — $28/hr")
+      var rateSelect = document.getElementById("inp-rate");
+      var rateText   = rateSelect.options[rateSelect.selectedIndex].text;
+      // Show just the first part: "Medical Care"
+      var careLabel  = rateText.split(" —")[0];
+
+      // ---- Update each summary line ----
+      document.getElementById("sum-care").innerHTML = careLabel;
+      document.getElementById("sum-rate").innerHTML = "$" + rate + "/hr";
+      document.getElementById("sum-duration").innerHTML = hours + " hour" + (hours !== 1 ? "s" : "");
+
+      // Format the date nicely if one is selected
+      if (dateVal !== "") {
+        // dateVal is "YYYY-MM-DD" — we split it and rearrange
+        var parts = dateVal.split("-");
+        document.getElementById("sum-date").innerHTML = parts[2] + "/" + parts[1] + "/" + parts[0];
+      } else {
+        document.getElementById("sum-date").innerHTML = "—";
+      }
+
+      if (timeVal !== "") {
+        document.getElementById("sum-time").innerHTML = timeVal;
+      } else {
+        document.getElementById("sum-time").innerHTML = "—";
+      }
+
+      // ---- COST CALCULATION ----
+      // hourly cost = rate × hours
+      var hourlyCost = rate * hours;
+
+      // overnight premium is $120 if overnight is on, else $0
+      var overnightCost = 0;
+      if (overnightOn === true) {
+        overnightCost = 120;
+      }
+
+      // total = hourly cost + overnight cost
+      var total = hourlyCost + overnightCost;
+
+      // Show or hide the overnight line
+      var overnightLine = document.getElementById("sum-overnight");
+      if (overnightOn === true) {
+        overnightLine.style.display = "flex";
+      } else {
+        overnightLine.style.display = "none";
+      }
+
+      // Write the total and formula
+      document.getElementById("sum-total").innerHTML = "$" + total;
+
+      if (overnightOn === true) {
+        document.getElementById("sum-formula").innerHTML = "$" + rate + " × " + hours + " hrs + $120 overnight = $" + total;
+      } else {
+        document.getElementById("sum-formula").innerHTML = "$" + rate + " × " + hours + " hrs = $" + total;
+      }
+    }
+
+
+    // ============ FORM VALIDATION & SUBMIT ============
+    function submitBooking() {
+
+      // We'll track if everything is valid
+      var isValid = true;
+
+      // --- Helper: mark a field as invalid or valid ---
+      // We do this individually for each field using getElementById
+
+      var fname   = document.getElementById("inp-fname").value.trim();
+      var lname   = document.getElementById("inp-lname").value.trim();
+      var email   = document.getElementById("inp-email").value.trim();
+      var phone   = document.getElementById("inp-phone").value.trim();
+      var address = document.getElementById("inp-address").value.trim();
+      var date    = document.getElementById("inp-date").value;
+      var time    = document.getElementById("inp-time").value;
+      var hours   = Number(document.getElementById("inp-hours").value);
+
+      // Check first name
+      if (fname === "") {
+        document.getElementById("inp-fname").className = "form-input invalid";
+        document.getElementById("err-fname").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-fname").className = "form-input";
+        document.getElementById("err-fname").style.display = "none";
+      }
+
+      // Check last name
+      if (lname === "") {
+        document.getElementById("inp-lname").className = "form-input invalid";
+        document.getElementById("err-lname").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-lname").className = "form-input";
+        document.getElementById("err-lname").style.display = "none";
+      }
+
+      // Check email — must contain "@"
+      if (email === "" || email.indexOf("@") === -1) {
+        document.getElementById("inp-email").className = "form-input invalid";
+        document.getElementById("err-email").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-email").className = "form-input";
+        document.getElementById("err-email").style.display = "none";
+      }
+
+      // Check phone
+      if (phone === "") {
+        document.getElementById("inp-phone").className = "form-input invalid";
+        document.getElementById("err-phone").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-phone").className = "form-input";
+        document.getElementById("err-phone").style.display = "none";
+      }
+
+      // Check address
+      if (address === "") {
+        document.getElementById("inp-address").className = "form-input invalid";
+        document.getElementById("err-address").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-address").className = "form-input";
+        document.getElementById("err-address").style.display = "none";
+      }
+
+      // Check that at least one care type is ticked
+      var anyChecked = false;
+      if (document.getElementById("c-medical").checked)    { anyChecked = true; }
+      if (document.getElementById("c-companion").checked)  { anyChecked = true; }
+      if (document.getElementById("c-surgery").checked)    { anyChecked = true; }
+      if (document.getElementById("c-dementia").checked)   { anyChecked = true; }
+      if (document.getElementById("c-rehab").checked)      { anyChecked = true; }
+
+      if (anyChecked === false) {
+        document.getElementById("err-care").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("err-care").style.display = "none";
+      }
+
+      // Check date
+      if (date === "") {
+        document.getElementById("inp-date").className = "form-input invalid";
+        document.getElementById("err-date").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-date").className = "form-input";
+        document.getElementById("err-date").style.display = "none";
+      }
+
+      // Check time
+      if (time === "") {
+        document.getElementById("inp-time").className = "form-input invalid";
+        document.getElementById("err-time").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-time").className = "form-input";
+        document.getElementById("err-time").style.display = "none";
+      }
+
+      // Check hours is between 1 and 12
+      if (hours < 1 || hours > 12) {
+        document.getElementById("inp-hours").className = "form-input invalid";
+        document.getElementById("err-hours").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("inp-hours").className = "form-input";
+        document.getElementById("err-hours").style.display = "none";
+      }
+
+      // ---- If everything is valid, show the confirmation popup ----
+      if (isValid === true) {
+
+        var rate     = Number(document.getElementById("inp-rate").value);
+        var total    = rate * hours;
+        if (overnightOn) { total = total + 120; }
+
+        // Generate a fake booking reference number
+        var refNum = "EC-" + Math.floor(100000 + Math.random() * 900000);
+
+        // Build the confirmation HTML string
+        var detailsHTML = "";
+        detailsHTML = detailsHTML + "<p>👤 <strong>Client:</strong> " + fname + " " + lname + "</p>";
+        detailsHTML = detailsHTML + "<p>📅 <strong>Date:</strong> " + date + "</p>";
+        detailsHTML = detailsHTML + "<p>⏰ <strong>Time:</strong> " + time + " · " + hours + " hours</p>";
+        if (overnightOn) {
+          detailsHTML = detailsHTML + "<p>🌙 <strong>Overnight:</strong> Yes (+$120)</p>";
         }
+        detailsHTML = detailsHTML + "<p>💰 <strong>Total Cost:</strong> $" + total + "</p>";
+        detailsHTML = detailsHTML + "<p>🔖 <strong>Reference:</strong> " + refNum + "</p>";
 
-        function getSelectedCareTypes() {
-            return Array.from(document.querySelectorAll('.care-check-item input:checked'))
-                .map(c => c.value);
-        }
+        document.getElementById("popup-details").innerHTML = detailsHTML;
+        document.getElementById("popup-overlay").style.display = "flex";
+      }
+    }
 
-        function getSelectedCaregiver() {
-            const sel = document.querySelector('input[name="caregiver"]:checked');
-            return sel ? sel.value : 'Best Match';
-        }
 
-        function getSelectedCaregiverRate() {
-            const sel = document.querySelector('input[name="caregiver"]:checked');
-            if (!sel || !sel.dataset.rate) return null;
-            return parseInt(sel.dataset.rate);
-        }
+    // Close the popup if user clicks the dark background
+    function closePopup() {
+      document.getElementById("popup-overlay").style.display = "none";
+    }
 
-        function updateSummary() {
-            const careTypes = getSelectedCareTypes();
-            const caregiver = getSelectedCaregiver();
-            const startDate = document.getElementById('startDate').value;
-            const startTime = document.getElementById('startTime').value;
+    // We attach this to the overlay div below using onclick
+    document.getElementById("popup-overlay").onclick = function(e) {
+      // Only close if they clicked the overlay itself (not the card inside it)
+      if (e.target === document.getElementById("popup-overlay")) {
+        closePopup();
+      }
+    };
 
-            // Determine rate: use caregiver rate if specific caregiver chosen, else highest care type rate
-            const cgRate = getSelectedCaregiverRate();
-            const baseRate = cgRate || getHighestRate();
-            currentHourlyRate = baseRate;
 
-            // Update UI
-            document.getElementById('sum-caretype').textContent = careTypes.length > 0 ?
-                (careTypes.length === 1 ? careTypes[0] : careTypes.length + ' services') :
-                '—';
+    // Run summary once on page load to show default values
+    updateSummary();
 
-            document.getElementById('sum-caregiver').textContent = caregiver;
+  </script>
 
-            document.getElementById('sum-date').textContent = startDate ?
-                new Date(startDate + 'T00:00').toLocaleDateString('en-IN', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                }) :
-                '—';
-
-            document.getElementById('sum-time').textContent = startTime || '—';
-            document.getElementById('sum-duration').textContent = duration + ' hour' + (duration > 1 ? 's' : '');
-            document.getElementById('sum-rate').textContent = baseRate > 0 ? '$' + baseRate + '/hr' : '—';
-
-            // Overnight row
-            const overnightRow = document.getElementById('sum-overnight-row');
-            overnightRow.classList.toggle('show', overnightActive);
-
-            // Calculate total
-            let total = baseRate * duration;
-            if (overnightActive) total += 120;
-
-            document.getElementById('sum-total').textContent = baseRate > 0 ? '$' + total.toLocaleString() : '$0';
-
-            if (baseRate > 0) {
-                let formula = '$' + baseRate + ' × ' + duration + ' hr';
-                if (overnightActive) formula += ' + $120 overnight';
-                formula += ' = $' + total;
-                document.getElementById('sum-formula').textContent = formula;
-            } else {
-                document.getElementById('sum-formula').textContent = 'Select care type & duration to calculate';
-            }
-        }
-
-        // Validation & Submit
-        function validateField(id, errorId, condition) {
-            const el = document.getElementById(id);
-            const errEl = document.getElementById(errorId);
-            if (!condition) {
-                el.classList.add('error');
-                errEl.classList.add('show');
-                return false;
-            }
-            el.classList.remove('error');
-            errEl.classList.remove('show');
-            return true;
-        }
-
-        function submitBooking() {
-            let valid = true;
-
-            valid = validateField('firstName', 'err-firstName', document.getElementById('firstName').value.trim()) && valid;
-            valid = validateField('lastName', 'err-lastName', document.getElementById('lastName').value.trim()) && valid;
-
-            const emailVal = document.getElementById('email').value.trim();
-            valid = validateField('email', 'err-email', emailVal && emailVal.includes('@')) && valid;
-            valid = validateField('phone', 'err-phone', document.getElementById('phone').value.trim()) && valid;
-            valid = validateField('address', 'err-address', document.getElementById('address').value.trim()) && valid;
-
-            const careTypes = getSelectedCareTypes();
-            const careErr = document.getElementById('err-caretype');
-            if (careTypes.length === 0) {
-                careErr.classList.add('show');
-                valid = false;
-            } else {
-                careErr.classList.remove('show');
-            }
-
-            valid = validateField('startDate', 'err-startDate', document.getElementById('startDate').value) && valid;
-            valid = validateField('startTime', 'err-startTime', document.getElementById('startTime').value) && valid;
-
-            if (duration < 1) {
-                document.getElementById('err-duration').classList.add('show');
-                valid = false;
-            } else {
-                document.getElementById('err-duration').classList.remove('show');
-            }
-
-            if (!valid) {
-                // Scroll to first error
-                const firstError = document.querySelector('.error');
-                if (firstError) firstError.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-                return;
-            }
-
-            // Show confirmation
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const dateVal = document.getElementById('startDate').value;
-            const timeVal = document.getElementById('startTime').value;
-            const caregiver = getSelectedCaregiver();
-            const cgRate = getSelectedCaregiverRate();
-            const baseRate = cgRate || getHighestRate();
-            let total = baseRate * duration + (overnightActive ? 120 : 0);
-
-            let detailsHTML = `
-        <p>👤 <strong>Client:</strong> ${firstName} ${lastName}</p>
-        <p>🛠️ <strong>Services:</strong> ${careTypes.join(', ')}${overnightActive ? ' + Overnight' : ''}</p>
-        <p>👩‍⚕️ <strong>Caregiver:</strong> ${caregiver}</p>
-        <p>📅 <strong>Date:</strong> ${new Date(dateVal + 'T00:00').toLocaleDateString('en-IN', {weekday:'long',day:'numeric',month:'long',year:'numeric'})}</p>
-        <p>⏰ <strong>Time:</strong> ${timeVal} · ${duration} hours</p>
-        <p>💰 <strong>Total Cost:</strong> $${total.toLocaleString()}</p>
-        <p>🔖 <strong>Booking Ref:</strong> EC-${Date.now().toString().slice(-6)}</p>
-      `;
-
-            document.getElementById('confirmDetails').innerHTML = detailsHTML;
-            document.getElementById('confirmModal').classList.add('show');
-        }
-
-        // Close modal on background click
-        document.getElementById('confirmModal').addEventListener('click', function(e) {
-            if (e.target === this) this.classList.remove('show');
-        });
-
-        updateSummary();
-    </script>
 </body>
-
 </html>
