@@ -1,691 +1,707 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caregivers – ElderCare</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Filter Bar */
-        
-        .filter-bar {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            padding: 1.25rem 0;
-            position: sticky;
-            top: 72px;
-            z-index: 100;
-        }
-        
-        .filter-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-        
-        .filter-label {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--muted);
-            margin-right: 0.25rem;
-        }
-        
-        .filter-btn {
-            padding: 0.4rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 50px;
-            background: white;
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: var(--muted);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'DM Sans', sans-serif;
-        }
-        
-        .filter-btn:hover {
-            border-color: var(--sage);
-            color: var(--sage-dark);
-        }
-        
-        .filter-btn.active {
-            border-color: var(--sage-dark);
-            background: var(--sage-dark);
-            color: white;
-        }
-        /* Caregiver grid - FLEXBOX */
-        
-        .caregivers-section {
-            padding: 4rem 0;
-        }
-        
-        .caregivers-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.75rem;
-            margin-top: 2.5rem;
-        }
-        
-        .caregiver-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
-            flex: 1 1 calc(33.333% - 1.75rem);
-            min-width: 280px;
-            max-width: calc(33.333% - 1.75rem);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .caregiver-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-        /* Card top colored band */
-        
-        .card-band {
-            height: 8px;
-            background: linear-gradient(90deg, var(--sage) 0%, var(--sage-dark) 100%);
-        }
-        
-        .caregiver-card .card-body {
-            padding: 1.75rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .caregiver-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-        }
-        
-        .caregiver-avatar {
-            width: 68px;
-            height: 68px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--sage), var(--blush));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            flex-shrink: 0;
-            border: 3px solid white;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .caregiver-info h3 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--charcoal);
-            margin-bottom: 0.2rem;
-        }
-        
-        .caregiver-info .role {
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-bottom: 0.5rem;
-        }
-        
-        .caregiver-rating {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.82rem;
-        }
-        
-        .stars-small {
-            color: var(--gold);
-            font-size: 0.75rem;
-        }
-        
-        .rating-num {
-            font-weight: 700;
-            color: var(--charcoal);
-        }
-        
-        .rating-count {
-            color: var(--muted);
-        }
-        /* Trust badges on card */
-        
-        .trust-badges-row {
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        
-        .trust-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0.22rem 0.6rem;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
-        
-        .tb-green {
-            background: rgba(76, 175, 114, 0.12);
-            color: #2e7d4e;
-            border: 1px solid rgba(76, 175, 114, 0.25);
-        }
-        
-        .tb-gold {
-            background: rgba(201, 168, 76, 0.12);
-            color: #8a6200;
-            border: 1px solid rgba(201, 168, 76, 0.25);
-        }
-        
-        .tb-blue {
-            background: rgba(66, 133, 244, 0.1);
-            color: #1a5fb4;
-            border: 1px solid rgba(66, 133, 244, 0.2);
-        }
-        
-        .tb-purple {
-            background: rgba(149, 97, 185, 0.1);
-            color: #6e3fa3;
-            border: 1px solid rgba(149, 97, 185, 0.2);
-        }
-        /* Experience tags */
-        
-        .experience-tags {
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        
-        .exp-tag {
-            padding: 0.25rem 0.65rem;
-            background: rgba(44, 62, 53, 0.06);
-            border-radius: 50px;
-            font-size: 0.73rem;
-            font-weight: 500;
-            color: var(--muted);
-        }
-        
-        .caregiver-bio {
-            font-size: 0.875rem;
-            color: var(--muted);
-            line-height: 1.7;
-            flex: 1;
-            margin-bottom: 1.25rem;
-        }
-        
-        .card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 1.25rem;
-            border-top: 1px solid var(--border);
-            margin-top: auto;
-        }
-        
-        .card-footer .rate {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--charcoal);
-        }
-        
-        .card-footer .rate span {
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: var(--muted);
-        }
-        
-        .availability-indicator {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.78rem;
-            color: #2e7d4e;
-            font-weight: 600;
-        }
-        
-        .availability-indicator .dot {
-            width: 8px;
-            height: 8px;
-            background: #4caf72;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        .card-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .card-actions .btn {
-            flex: 1;
-            justify-content: center;
-            padding: 0.65rem 1rem;
-            font-size: 0.85rem;
-        }
-        /* Years badge */
-        
-        .years-badge {
-            background: var(--gold);
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 0.2rem 0.55rem;
-            border-radius: 50px;
-            display: inline-block;
-        }
-        /* Stats row */
-        
-        .stats-section {
-            background: linear-gradient(160deg, var(--sage-dark), var(--charcoal));
-            color: white;
-            padding: 4rem 0;
-        }
-        
-        .stats-row {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 2rem;
-            text-align: center;
-        }
-        
-        .stat-big .num {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3rem;
-            font-weight: 700;
-            line-height: 1;
-            color: white;
-        }
-        
-        .stat-big .label {
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 0.4rem;
-        }
-        
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
-        }
-        
-        @media (max-width: 1024px) {
-            .caregiver-card {
-                max-width: calc(50% - 1.75rem);
-                flex-basis: calc(50% - 1.75rem);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .caregiver-card {
-                max-width: 100%;
-                flex-basis: 100%;
-            }
-            .filter-inner {
-                gap: 0.5rem;
-            }
-        }
-    </style>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caregivers – ElderCare</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
 
+    /* ---- FILTER BAR ---- */
+    .filter-bar {
+      background-color: white;
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 2rem;
+      position: sticky;
+      top: 68px;
+      z-index: 100;
+    }
+
+    .filter-bar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--grey);
+      margin-right: 0.25rem;
+    }
+
+    .filter-btn {
+      padding: 0.38rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      background-color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--grey);
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--green);
+      color: var(--green-dark);
+    }
+
+    .filter-btn.active {
+      background-color: var(--green-dark);
+      border-color: var(--green-dark);
+      color: white;
+    }
+
+    /* ---- CAREGIVER CARDS — FLEXBOX LAYOUT ---- */
+    .cards-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    /* Each card takes up 1/3 width (minus gaps) */
+    .cg-card {
+      flex: 1 1 calc(33.333% - 1.5rem);
+      min-width: 270px;
+      max-width: calc(33.333% - 1.5rem);
+      background-color: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cg-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-big);
+    }
+
+    /* Coloured top strip */
+    .card-strip {
+      height: 7px;
+      background: linear-gradient(90deg, var(--green), var(--green-dark));
+    }
+
+    .card-body {
+      padding: 1.6rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top row: avatar + name */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .cg-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #c5deca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      flex-shrink: 0;
+      border: 3px solid white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .cg-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.18rem;
+    }
+
+    .cg-role {
+      font-size: 0.77rem;
+      color: var(--grey);
+      margin-bottom: 0.4rem;
+    }
+
+    .years-pill {
+      display: inline-block;
+      background-color: var(--gold);
+      color: white;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 50px;
+    }
+
+    .cg-rating {
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cg-stars { color: var(--gold); font-size: 0.74rem; }
+
+    /* Trust badges row */
+    .badge-row {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+    }
+
+    /* Experience tags */
+    .exp-tags {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.9rem;
+    }
+
+    .exp-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.22rem 0.6rem;
+      background-color: rgba(44,56,48,0.06);
+      color: var(--grey);
+      border-radius: 50px;
+    }
+
+    .cg-bio {
+      font-size: 0.84rem;
+      color: var(--grey);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.1rem;
+    }
+
+    .card-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .cg-rate {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .cg-rate small {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: var(--grey);
+    }
+
+    .avail {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #2e7d4e;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .avail-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #4caf72;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .card-btns {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+    }
+
+    .card-btns .btn {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.82rem;
+    }
+
+    /* ---- STATS STRIP ---- */
+    .stats-strip {
+      background: linear-gradient(150deg, var(--green-dark), var(--charcoal));
+      color: white;
+      padding: 3.5rem 2rem;
+    }
+
+    .stats-row {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .big-stat .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .big-stat .lbl {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 0.3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .cg-card {
+        max-width: calc(50% - 1.5rem);
+        flex-basis: calc(50% - 1.5rem);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .cg-card {
+        max-width: 100%;
+        flex-basis: 100%;
+      }
+    }
+
+  </style>
+</head>
 <body>
 
-    <div id="nav-placeholder"></div>
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">🌿 Elder<span class="dot">Care</span></a>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="caregivers.html" class="active">Caregivers</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="booking.html" class="nav-book-btn">Book Now</a></li>
+    </ul>
+    <button class="hamburger-btn" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-    <div class="page-hero">
-        <div class="section-label" style="color:rgba(255,255,255,0.7)">Our Team</div>
-        <h1>Meet Our Caregivers</h1>
-        <p>Professionally trained, background-checked, and compassion-driven. Every caregiver is handpicked for excellence.</p>
+  <!-- PAGE BANNER -->
+  <div class="page-banner">
+    <h1>Meet Our Caregivers</h1>
+    <p>Professionally trained, background-checked, and compassion-driven. Every caregiver is handpicked for excellence.</p>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Filter by:</span>
+      <button class="filter-btn active" id="btn-all"       onclick="filterCards('all')">All</button>
+      <button class="filter-btn"        id="btn-medical"   onclick="filterCards('medical')">Medical</button>
+      <button class="filter-btn"        id="btn-companion" onclick="filterCards('companion')">Companion</button>
+      <button class="filter-btn"        id="btn-surgery"   onclick="filterCards('surgery')">Post-Surgery</button>
+      <button class="filter-btn"        id="btn-dementia"  onclick="filterCards('dementia')">Dementia</button>
     </div>
+  </div>
 
-    <!-- Filter Bar -->
-    <div class="filter-bar">
-        <div class="filter-inner">
-            <span class="filter-label">Filter:</span>
-            <button class="filter-btn active" data-filter="all">All Caregivers</button>
-            <button class="filter-btn" data-filter="medical">Medical</button>
-            <button class="filter-btn" data-filter="companion">Companion</button>
-            <button class="filter-btn" data-filter="postsurgery">Post-Surgery</button>
-            <button class="filter-btn" data-filter="dementia">Dementia</button>
-        </div>
+  <!-- CAREGIVER CARDS -->
+  <section class="section">
+    <div class="container">
+      <div class="cards-flex" id="cards-flex">
+
+        <!-- Card 1: Sarah — medical, companion -->
+        <article class="cg-card" id="card-sarah" data-tags="medical companion">
+          <div class="card-strip"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="cg-avatar">👩‍⚕️</div>
+              <div>
+                <div class="cg-name">Sarah Mathews</div>
+                <div class="cg-role">Senior Care Specialist &nbsp;<span class="years-pill">12 yrs</span></div>
+                <div class="cg-rating">
+                  <span class="cg-stars">★★★★★</span>
+                  <strong>4.9</strong>
+                  <span style="color:var(--grey)">(186)</span>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="trust-badge badge-green">✓ Verified</span>
+              <span class="trust-badge badge-gold">🏅 Background Checked</span>
+              <span class="trust-badge badge-blue">💉 CPR Cert.</span>
+            </div>
+            <div class="exp-tags">
+              <span class="exp-tag">Medical Care</span>
+              <span class="exp-tag">Companion Care</span>
+              <span class="exp-tag">CNA Certified</span>
+              <span class="exp-tag">Diabetes Mgmt</span>
+            </div>
+            <p class="cg-bio">Sarah brings 12 years of dedicated elderly care experience, specialising in chronic disease management and emotional support for both patients and families.</p>
+            <div class="card-footer-row">
+              <div>
+                <div class="cg-rate">$28/hr <small>medical rate</small></div>
+                <div class="avail"><span class="avail-dot"></span> Available Now</div>
+              </div>
+            </div>
+            <div class="card-btns">
+              <a href="caregivers.html" class="btn btn-outline">View Profile</a>
+              <a href="booking.html" class="btn btn-green">Book Now</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Rajan — surgery, medical -->
+        <article class="cg-card" id="card-rajan" data-tags="surgery medical">
+          <div class="card-strip" style="background:linear-gradient(90deg,#c9844c,#9e5520)"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="cg-avatar" style="background:linear-gradient(135deg,#c9844c,#e8c4a0)">👨‍⚕️</div>
+              <div>
+                <div class="cg-name">Dr. Rajan Pillai</div>
+                <div class="cg-role">Medical Specialist &nbsp;<span class="years-pill">8 yrs</span></div>
+                <div class="cg-rating">
+                  <span class="cg-stars">★★★★★</span>
+                  <strong>4.8</strong>
+                  <span style="color:var(--grey)">(142)</span>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="trust-badge badge-green">✓ Verified</span>
+              <span class="trust-badge badge-gold">🏅 Background Checked</span>
+              <span class="trust-badge badge-blue">🏥 Medically Trained</span>
+            </div>
+            <div class="exp-tags">
+              <span class="exp-tag">Post-Surgery</span>
+              <span class="exp-tag">Wound Care</span>
+              <span class="exp-tag">Palliative Care</span>
+              <span class="exp-tag">RN Supervised</span>
+            </div>
+            <p class="cg-bio">Former hospital nurse specialising in post-operative care. Rajan's clinical background ensures precise medication management and meticulous wound monitoring.</p>
+            <div class="card-footer-row">
+              <div>
+                <div class="cg-rate">$32/hr <small>specialised rate</small></div>
+                <div class="avail"><span class="avail-dot"></span> Available Now</div>
+              </div>
+            </div>
+            <div class="card-btns">
+              <a href="caregivers.html" class="btn btn-outline">View Profile</a>
+              <a href="booking.html" class="btn btn-green">Book Now</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Meena — companion, dementia -->
+        <article class="cg-card" id="card-meena" data-tags="companion dementia">
+          <div class="card-strip" style="background:linear-gradient(90deg,#9577c4,#6030a0)"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="cg-avatar" style="background:linear-gradient(135deg,#9577c4,#c8b0e8)">👩</div>
+              <div>
+                <div class="cg-name">Meena Krishnan</div>
+                <div class="cg-role">Dementia Specialist &nbsp;<span class="years-pill">15 yrs</span></div>
+                <div class="cg-rating">
+                  <span class="cg-stars">★★★★★</span>
+                  <strong>5.0</strong>
+                  <span style="color:var(--grey)">(224)</span>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="trust-badge badge-green">✓ Verified</span>
+              <span class="trust-badge badge-gold">🏅 Background Checked</span>
+              <span class="trust-badge badge-blue">🧠 Dementia Cert.</span>
+            </div>
+            <div class="exp-tags">
+              <span class="exp-tag">Dementia</span>
+              <span class="exp-tag">Alzheimer's</span>
+              <span class="exp-tag">Companion Care</span>
+              <span class="exp-tag">Bilingual</span>
+            </div>
+            <p class="cg-bio">Meena holds a Dementia Care Certification and uses evidence-based memory care approaches. She brings remarkable patience and genuine kindness to every session.</p>
+            <div class="card-footer-row">
+              <div>
+                <div class="cg-rate">$30/hr <small>specialised rate</small></div>
+                <div class="avail"><span class="avail-dot"></span> Available Now</div>
+              </div>
+            </div>
+            <div class="card-btns">
+              <a href="caregivers.html" class="btn btn-outline">View Profile</a>
+              <a href="booking.html" class="btn btn-green">Book Now</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4: Anil — companion, medical -->
+        <article class="cg-card" id="card-anil" data-tags="companion medical">
+          <div class="card-strip" style="background:linear-gradient(90deg,#4caf72,#2a6e44)"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="cg-avatar" style="background:linear-gradient(135deg,#4caf72,#a0e0b8)">👨</div>
+              <div>
+                <div class="cg-name">Anil Sharma</div>
+                <div class="cg-role">Home Health Aide &nbsp;<span class="years-pill">6 yrs</span></div>
+                <div class="cg-rating">
+                  <span class="cg-stars">★★★★☆</span>
+                  <strong>4.7</strong>
+                  <span style="color:var(--grey)">(98)</span>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="trust-badge badge-green">✓ Verified</span>
+              <span class="trust-badge badge-gold">🏅 Background Checked</span>
+              <span class="trust-badge badge-blue">💉 CPR Cert.</span>
+            </div>
+            <div class="exp-tags">
+              <span class="exp-tag">Companion Care</span>
+              <span class="exp-tag">Mobility Assist</span>
+              <span class="exp-tag">HHA Certified</span>
+              <span class="exp-tag">Meal Prep</span>
+            </div>
+            <p class="cg-bio">Anil has a natural gift for building genuine connections. Clients love his positive attitude, cooking skills, and ability to make every day meaningful.</p>
+            <div class="card-footer-row">
+              <div>
+                <div class="cg-rate">$20/hr <small>companion rate</small></div>
+                <div class="avail" style="color:#b57308"><span class="avail-dot" style="background:#f5a623"></span> Booking Soon</div>
+              </div>
+            </div>
+            <div class="card-btns">
+              <a href="caregivers.html" class="btn btn-outline">View Profile</a>
+              <a href="booking.html" class="btn btn-green">Book Now</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5: Priya — surgery, medical -->
+        <article class="cg-card" id="card-priya" data-tags="surgery medical">
+          <div class="card-strip" style="background:linear-gradient(90deg,#4a90d9,#1a4f94)"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="cg-avatar" style="background:linear-gradient(135deg,#4a90d9,#b0d0f0)">👩‍⚕️</div>
+              <div>
+                <div class="cg-name">Priya Nair</div>
+                <div class="cg-role">Rehabilitation Aide &nbsp;<span class="years-pill">10 yrs</span></div>
+                <div class="cg-rating">
+                  <span class="cg-stars">★★★★★</span>
+                  <strong>4.9</strong>
+                  <span style="color:var(--grey)">(163)</span>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="trust-badge badge-green">✓ Verified</span>
+              <span class="trust-badge badge-gold">🏅 Background Checked</span>
+              <span class="trust-badge badge-blue">🏃 PT Trained</span>
+            </div>
+            <div class="exp-tags">
+              <span class="exp-tag">Post-Surgery</span>
+              <span class="exp-tag">Rehab Support</span>
+              <span class="exp-tag">Fall Prevention</span>
+              <span class="exp-tag">PT Assistant</span>
+            </div>
+            <p class="cg-bio">Priya holds a Physical Therapist Assistant licence and specialises in post-surgery recovery. Her mobility programmes accelerate patient recovery significantly.</p>
+            <div class="card-footer-row">
+              <div>
+                <div class="cg-rate">$26/hr <small>rehab rate</small></div>
+                <div class="avail"><span class="avail-dot"></span> Available Now</div>
+              </div>
+            </div>
+            <div class="card-btns">
+              <a href="caregivers.html" class="btn btn-outline">View Profile</a>
+              <a href="booking.html" class="btn btn-green">Book Now</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6: Joseph — companion, dementia -->
+        <article class="cg-card" id="card-joseph" data-tags="companion dementia">
+          <div class="card-strip" style="background:linear-gradient(90deg,#e07b7b,#b03030)"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="cg-avatar" style="background:linear-gradient(135deg,#e07b7b,#f0c0c0)">👴</div>
+              <div>
+                <div class="cg-name">Joseph Matthew</div>
+                <div class="cg-role">Companion Specialist &nbsp;<span class="years-pill">9 yrs</span></div>
+                <div class="cg-rating">
+                  <span class="cg-stars">★★★★★</span>
+                  <strong>4.8</strong>
+                  <span style="color:var(--grey)">(117)</span>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="trust-badge badge-green">✓ Verified</span>
+              <span class="trust-badge badge-gold">🏅 Background Checked</span>
+              <span class="trust-badge badge-blue">🎓 Mental Health Aid</span>
+            </div>
+            <div class="exp-tags">
+              <span class="exp-tag">Companion Care</span>
+              <span class="exp-tag">Emotional Support</span>
+              <span class="exp-tag">Dementia</span>
+              <span class="exp-tag">Activity Coord.</span>
+            </div>
+            <p class="cg-bio">Joseph has a gift for creating joy and meaningful engagement. His Mental Health First Aid certification helps him excel at emotional wellness support for isolated seniors.</p>
+            <div class="card-footer-row">
+              <div>
+                <div class="cg-rate">$22/hr <small>companion rate</small></div>
+                <div class="avail"><span class="avail-dot"></span> Available Now</div>
+              </div>
+            </div>
+            <div class="card-btns">
+              <a href="caregivers.html" class="btn btn-outline">View Profile</a>
+              <a href="booking.html" class="btn btn-green">Book Now</a>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- end cards-flex -->
     </div>
+  </section>
 
-    <section class="caregivers-section">
-        <div class="container">
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-row">
+      <div class="big-stat"><div class="num">500+</div><div class="lbl">Active Caregivers</div></div>
+      <div class="big-stat"><div class="num">98%</div><div class="lbl">Satisfaction Rate</div></div>
+      <div class="big-stat"><div class="num">100%</div><div class="lbl">Background Verified</div></div>
+      <div class="big-stat"><div class="num">24/7</div><div class="lbl">Support Available</div></div>
+    </div>
+  </div>
 
-            <div class="caregivers-flex" id="caregiverGrid">
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">🌿 ElderCare</div>
+        <p class="footer-desc">Compassionate, professional elderly care. Serving families with heart.</p>
+        <span class="footer-pill">✓ Licensed & Insured</span>
+        <span class="footer-pill">✓ Background Checked</span>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <ul>
+          <li><a href="services.html">Medical Care</a></li>
+          <li><a href="services.html">Companion Care</a></li>
+          <li><a href="services.html">Post-Surgery</a></li>
+          <li><a href="services.html">Overnight Care</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <ul>
+          <li><a href="caregivers.html">Our Caregivers</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 ElderCare. All rights reserved.</p>
+      <div>
+        <span class="footer-pill">HIPAA Compliant</span>
+        <span class="footer-pill">Accredited Agency</span>
+      </div>
+    </div>
+  </footer>
 
-                <!-- Card 1 -->
-                <article class="caregiver-card" data-specialty="medical companion">
-                    <div class="card-band"></div>
-                    <div class="card-body">
-                        <div class="caregiver-header">
-                            <div class="caregiver-avatar">👩‍⚕️</div>
-                            <div class="caregiver-info">
-                                <h3>Sarah Mathews</h3>
-                                <div class="role">Senior Care Specialist · <span class="years-badge">12 yrs</span></div>
-                                <div class="caregiver-rating">
-                                    <span class="stars-small">★★★★★</span>
-                                    <span class="rating-num">4.9</span>
-                                    <span class="rating-count">(186 reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trust-badges-row">
-                            <span class="trust-badge tb-green">✓ Verified</span>
-                            <span class="trust-badge tb-gold">🏅 Background Checked</span>
-                            <span class="trust-badge tb-blue">💉 CPR Certified</span>
-                        </div>
-                        <div class="experience-tags">
-                            <span class="exp-tag">Medical Care</span>
-                            <span class="exp-tag">Companion Care</span>
-                            <span class="exp-tag">CNA Certified</span>
-                            <span class="exp-tag">Diabetes Mgmt</span>
-                        </div>
-                        <p class="caregiver-bio">Sarah brings 12 years of dedicated elderly care experience. Specializes in chronic disease management and provides exceptional emotional support for both patients and families.</p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="rate">$28/hr <span>medical rate</span></div>
-                                <div class="availability-indicator"><span class="dot"></span>Available Now</div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="caregivers.html#" class="btn btn-outline">View Profile</a>
-                            <a href="booking.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </article>
 
-                <!-- Card 2 -->
-                <article class="caregiver-card" data-specialty="postsurgery medical">
-                    <div class="card-band" style="background:linear-gradient(90deg,#c9844c,#a06030)"></div>
-                    <div class="card-body">
-                        <div class="caregiver-header">
-                            <div class="caregiver-avatar" style="background:linear-gradient(135deg,#c9844c,#e8c4a0)">👨‍⚕️</div>
-                            <div class="caregiver-info">
-                                <h3>Dr. Rajan Pillai</h3>
-                                <div class="role">Medical Care Specialist · <span class="years-badge">8 yrs</span></div>
-                                <div class="caregiver-rating">
-                                    <span class="stars-small">★★★★★</span>
-                                    <span class="rating-num">4.8</span>
-                                    <span class="rating-count">(142 reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trust-badges-row">
-                            <span class="trust-badge tb-green">✓ Verified</span>
-                            <span class="trust-badge tb-gold">🏅 Background Checked</span>
-                            <span class="trust-badge tb-purple">🏥 Medically Trained</span>
-                        </div>
-                        <div class="experience-tags">
-                            <span class="exp-tag">Post-Surgery</span>
-                            <span class="exp-tag">Wound Care</span>
-                            <span class="exp-tag">Palliative Care</span>
-                            <span class="exp-tag">RN Supervised</span>
-                        </div>
-                        <p class="caregiver-bio">Former hospital nurse with specialization in post-operative care. Rajan's clinical background ensures precise medication management and meticulous wound monitoring.</p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="rate">$32/hr <span>specialized rate</span></div>
-                                <div class="availability-indicator"><span class="dot"></span>Available Now</div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="caregivers.html#" class="btn btn-outline">View Profile</a>
-                            <a href="booking.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </article>
+  <!-- ============================================================
+       JAVASCRIPT — Concepts used:
+       · getElementById()     — grab elements by id
+       · .style.display       — show / hide cards
+       · .className           — set CSS classes on buttons
+       · .getAttribute()      — read the data-tags attribute
+       · Variables (var)      — storing data
+       · if / else            — conditional logic
+       · Functions            — reusable blocks
+       · onclick (in HTML)    — trigger functions on click
+       · String .indexOf()    — check if a word is inside a string
+       · Arithmetic (+)       — not needed here but used in booking
+  ============================================================= -->
+  <script>
 
-                <!-- Card 3 -->
-                <article class="caregiver-card" data-specialty="companion dementia">
-                    <div class="card-band" style="background:linear-gradient(90deg,#9577c4,#6b45a0)"></div>
-                    <div class="card-body">
-                        <div class="caregiver-header">
-                            <div class="caregiver-avatar" style="background:linear-gradient(135deg,#9577c4,#c4b0e8)">👩</div>
-                            <div class="caregiver-info">
-                                <h3>Meena Krishnan</h3>
-                                <div class="role">Dementia Care Specialist · <span class="years-badge">15 yrs</span></div>
-                                <div class="caregiver-rating">
-                                    <span class="stars-small">★★★★★</span>
-                                    <span class="rating-num">5.0</span>
-                                    <span class="rating-count">(224 reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trust-badges-row">
-                            <span class="trust-badge tb-green">✓ Verified</span>
-                            <span class="trust-badge tb-gold">🏅 Background Checked</span>
-                            <span class="trust-badge tb-purple">🧠 Dementia Cert.</span>
-                        </div>
-                        <div class="experience-tags">
-                            <span class="exp-tag">Dementia</span>
-                            <span class="exp-tag">Alzheimer's</span>
-                            <span class="exp-tag">Companion Care</span>
-                            <span class="exp-tag">Bilingual</span>
-                        </div>
-                        <p class="caregiver-bio">Meena is among our most experienced caregivers with a Dementia Care Certification. She uses evidence-based memory care approaches and brings remarkable patience and kindness.</p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="rate">$30/hr <span>specialized rate</span></div>
-                                <div class="availability-indicator"><span class="dot"></span>Available Now</div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="caregivers.html#" class="btn btn-outline">View Profile</a>
-                            <a href="booking.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </article>
+    // --- HAMBURGER MENU ---
+    function toggleMenu() {
+      var menu = document.getElementById("nav-menu");
+      if (menu.className === "nav-menu menu-open") {
+        menu.className = "nav-menu";
+      } else {
+        menu.className = "nav-menu menu-open";
+      }
+    }
 
-                <!-- Card 4 -->
-                <article class="caregiver-card" data-specialty="companion medical">
-                    <div class="card-band" style="background:linear-gradient(90deg,#4caf72,#2e7d4e)"></div>
-                    <div class="card-body">
-                        <div class="caregiver-header">
-                            <div class="caregiver-avatar" style="background:linear-gradient(135deg,#4caf72,#a0e0b8)">👨</div>
-                            <div class="caregiver-info">
-                                <h3>Anil Sharma</h3>
-                                <div class="role">Home Health Aide · <span class="years-badge">6 yrs</span></div>
-                                <div class="caregiver-rating">
-                                    <span class="stars-small">★★★★☆</span>
-                                    <span class="rating-num">4.7</span>
-                                    <span class="rating-count">(98 reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trust-badges-row">
-                            <span class="trust-badge tb-green">✓ Verified</span>
-                            <span class="trust-badge tb-gold">🏅 Background Checked</span>
-                            <span class="trust-badge tb-blue">💉 CPR Certified</span>
-                        </div>
-                        <div class="experience-tags">
-                            <span class="exp-tag">Companion Care</span>
-                            <span class="exp-tag">Mobility Assist</span>
-                            <span class="exp-tag">HHA Certified</span>
-                            <span class="exp-tag">Meal Prep</span>
-                        </div>
-                        <p class="caregiver-bio">Anil is a warm, energetic caregiver with a gift for building genuine connections. Clients love his positive attitude, cooking skills, and ability to make every day meaningful.</p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="rate">$20/hr <span>companion rate</span></div>
-                                <div class="availability-indicator"><span class="dot" style="background:#f5a623"></span><span style="color:#b57308">Booking Soon</span></div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="caregivers.html#" class="btn btn-outline">View Profile</a>
-                            <a href="booking.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </article>
 
-                <!-- Card 5 -->
-                <article class="caregiver-card" data-specialty="postsurgery medical">
-                    <div class="card-band" style="background:linear-gradient(90deg,#4a90d9,#1a5fb4)"></div>
-                    <div class="card-body">
-                        <div class="caregiver-header">
-                            <div class="caregiver-avatar" style="background:linear-gradient(135deg,#4a90d9,#b0d0f0)">👩‍⚕️</div>
-                            <div class="caregiver-info">
-                                <h3>Priya Nair</h3>
-                                <div class="role">Rehabilitation Aide · <span class="years-badge">10 yrs</span></div>
-                                <div class="caregiver-rating">
-                                    <span class="stars-small">★★★★★</span>
-                                    <span class="rating-num">4.9</span>
-                                    <span class="rating-count">(163 reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trust-badges-row">
-                            <span class="trust-badge tb-green">✓ Verified</span>
-                            <span class="trust-badge tb-gold">🏅 Background Checked</span>
-                            <span class="trust-badge tb-blue">🏃 PT Trained</span>
-                        </div>
-                        <div class="experience-tags">
-                            <span class="exp-tag">Post-Surgery</span>
-                            <span class="exp-tag">Rehab Support</span>
-                            <span class="exp-tag">Fall Prevention</span>
-                            <span class="exp-tag">PT Assistant</span>
-                        </div>
-                        <p class="caregiver-bio">Priya holds a Physical Therapist Assistant license and specializes in post-surgery recovery and rehabilitation. Her expertise in mobility aids and exercise programs accelerates recovery.</p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="rate">$26/hr <span>rehab rate</span></div>
-                                <div class="availability-indicator"><span class="dot"></span>Available Now</div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="caregivers.html#" class="btn btn-outline">View Profile</a>
-                            <a href="booking.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </article>
+    // --- FILTER CAREGIVERS ---
+    // Called when a filter button is clicked, e.g. filterCards('medical')
+    function filterCards(filter) {
 
-                <!-- Card 6 -->
-                <article class="caregiver-card" data-specialty="companion dementia">
-                    <div class="card-band" style="background:linear-gradient(90deg,#e07b7b,#b04040)"></div>
-                    <div class="card-body">
-                        <div class="caregiver-header">
-                            <div class="caregiver-avatar" style="background:linear-gradient(135deg,#e07b7b,#f0c0c0)">👴</div>
-                            <div class="caregiver-info">
-                                <h3>Joseph Matthew</h3>
-                                <div class="role">Companion Specialist · <span class="years-badge">9 yrs</span></div>
-                                <div class="caregiver-rating">
-                                    <span class="stars-small">★★★★★</span>
-                                    <span class="rating-num">4.8</span>
-                                    <span class="rating-count">(117 reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trust-badges-row">
-                            <span class="trust-badge tb-green">✓ Verified</span>
-                            <span class="trust-badge tb-gold">🏅 Background Checked</span>
-                            <span class="trust-badge tb-purple">🎓 Mental Health First Aid</span>
-                        </div>
-                        <div class="experience-tags">
-                            <span class="exp-tag">Companion Care</span>
-                            <span class="exp-tag">Emotional Support</span>
-                            <span class="exp-tag">Dementia Support</span>
-                            <span class="exp-tag">Activity Coord.</span>
-                        </div>
-                        <p class="caregiver-bio">Joseph has a natural gift for creating joy and meaningful engagement. With Mental Health First Aid certification, he excels at emotional wellness support and social activities for isolated seniors.</p>
-                        <div class="card-footer">
-                            <div>
-                                <div class="rate">$22/hr <span>companion rate</span></div>
-                                <div class="availability-indicator"><span class="dot"></span>Available Now</div>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="caregivers.html#" class="btn btn-outline">View Profile</a>
-                            <a href="booking.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </article>
+      // --- Step 1: Reset ALL filter buttons to inactive ---
+      document.getElementById("btn-all").className       = "filter-btn";
+      document.getElementById("btn-medical").className   = "filter-btn";
+      document.getElementById("btn-companion").className = "filter-btn";
+      document.getElementById("btn-surgery").className   = "filter-btn";
+      document.getElementById("btn-dementia").className  = "filter-btn";
 
-            </div>
-        </div>
-    </section>
+      // --- Step 2: Mark the clicked button as active ---
+      document.getElementById("btn-" + filter).className = "filter-btn active";
 
-    <!-- Stats -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="stats-row">
-                <div class="stat-big">
-                    <div class="num">500+</div>
-                    <div class="label">Active Caregivers</div>
-                </div>
-                <div class="stat-big">
-                    <div class="num">98%</div>
-                    <div class="label">Client Satisfaction</div>
-                </div>
-                <div class="stat-big">
-                    <div class="num">100%</div>
-                    <div class="label">Background Verified</div>
-                </div>
-                <div class="stat-big">
-                    <div class="num">24/7</div>
-                    <div class="label">Available Support</div>
-                </div>
-            </div>
-        </div>
-    </section>
+      // --- Step 3: Show / hide each card based on its data-tags ---
+      // We grab each card individually by id
 
-    <div id="footer-placeholder"></div>
-    <script src="shared.js"></script>
-    <script>
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.caregiver-card');
+      var cardSarah  = document.getElementById("card-sarah");
+      var cardRajan  = document.getElementById("card-rajan");
+      var cardMeena  = document.getElementById("card-meena");
+      var cardAnil   = document.getElementById("card-anil");
+      var cardPriya  = document.getElementById("card-priya");
+      var cardJoseph = document.getElementById("card-joseph");
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+      // showCard() is a helper function to avoid repeating code
+      showCard(cardSarah,  filter);
+      showCard(cardRajan,  filter);
+      showCard(cardMeena,  filter);
+      showCard(cardAnil,   filter);
+      showCard(cardPriya,  filter);
+      showCard(cardJoseph, filter);
+    }
 
-                const filter = btn.dataset.filter;
 
-                cards.forEach(card => {
-                    const specialties = card.dataset.specialty || '';
-                    if (filter === 'all' || specialties.includes(filter)) {
-                        card.style.display = '';
-                        card.style.animation = 'fadeInCard 0.35s ease forwards';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-    </script>
-    <style>
-        @keyframes fadeInCard {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    // Helper: decides whether to show or hide a single card
+    // card    — the HTML element
+    // filter  — the string like "medical" or "all"
+    function showCard(card, filter) {
+
+      // Read the data-tags attribute from the card
+      var tags = card.getAttribute("data-tags");
+
+      // If filter is "all", OR if the tags string contains the filter word — show it
+      if (filter === "all" || tags.indexOf(filter) !== -1) {
+        card.style.display = "";        // restore default display
+      } else {
+        card.style.display = "none";    // hide it
+      }
+    }
+
+  </script>
+
 </body>
-
 </html>
